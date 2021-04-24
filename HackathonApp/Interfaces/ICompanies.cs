@@ -7,17 +7,17 @@ namespace HackathonApp.Interfaces
 {
     public interface ICompanies
     {
-        Task<int> CreateCompany(CreateCompanyDto data);
+        Task<Guid> CreateCompany(CreateCompanyDto data);
 
-        Task<CompanyDto> GetCompanyData(int id);
+        Task<CompanyDto> GetCompanyData(Guid id);
 
-        Task<List<UserDetailsDto>> GetListOfEmployees(int id);
+        Task<List<UserDetailsDto>> GetListOfEmployees(Guid id);
 
-        Task<int> CreateManager(CreateManagerDto data);
+        Task<Guid> CreateManager(CreateManagerDto data);
 
-        Task<int> CreateBranchManager(CreateManagerDto data);
+        Task<Guid> CreateBranchManager(CreateManagerDto data);
 
-        Task<int> CreateBranch(CreateBranchDto data);
+        Task<Guid> CreateBranch(CreateBranchDto data);
 
 
     }

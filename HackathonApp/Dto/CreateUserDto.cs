@@ -1,7 +1,10 @@
+using System;
+
 namespace HackathonApp.Dto
 {
     public class CreateUserDto
     {
+        public Guid Id { get; set; }
         public string FirstName { get; set; }
         
         public string LastName { get; set; }
