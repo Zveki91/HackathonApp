@@ -25,7 +25,8 @@ namespace HackathonApp.Repositories
             if (branch == null) throw new MyNotFoundException("Branch not found.", 404);
             var customer = await _context.Users.FirstOrDefaultAsync(x => x.Id == data.CustomerId);
             if (customer == null) throw new MyNotFoundException("Customer not found.", 404);
-            var articles = await _context.Article.Where(x => data.Articles.Contains(x.Id)).ToListAsync();
+            var articles = await _context.Article.Where(x => data.Articles.Select(x => x.ArticleId)
+                .Contains(x.Id)).ToListAsync();
             if (articles.Count == 0) throw new MyBadRequestException("Purchase must have at least 1 article.", 400);
 
             var newPurchase = new Purchase

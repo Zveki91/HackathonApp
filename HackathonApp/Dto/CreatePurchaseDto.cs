@@ -9,7 +9,7 @@ namespace HackathonApp.Dto
 
         public Guid CustomerId { get; set; }
 
-        public List<Guid> Articles { get; set; }
+        public List<PurchaseArticleDto> Articles { get; set; }
 
         public decimal TotalPrice { get; set; }
     }

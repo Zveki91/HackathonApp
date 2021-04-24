@@ -15,5 +15,7 @@ namespace HackathonApp.Data
         
         [ForeignKey("PurchaseId")]
         public virtual Purchase Purchase { get; set; }
+        
+        public int Quantity { get; set; }
     }
 }
