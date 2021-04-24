@@ -15,5 +15,7 @@ namespace HackathonApp.Interfaces
         public Task<LoginTokenDto> Login(LoginDto data);
         
         public Task<bool> UpdateUser(Guid id, UserUpdateDto data);
+
+        public Task<UserDetailsDto> GetUserDetails(Guid id, string role);
     }
 }

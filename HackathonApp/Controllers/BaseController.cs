@@ -28,7 +28,7 @@ namespace HackathonApp.Controllers
                 RpcClient rpcClient = new RpcClient(new Uri(Configuration["NodeUrl"]));
                 Account account = new Account(Configuration["PrivateKey"], Chain.Ropsten);
                 account.NonceService = new InMemoryNonceService(account.Address, rpcClient);
-                _web3Cache = new Web3(account);
+                _web3Cache = new Web3(account, rpcClient);
                 return _web3;
             }
         }
