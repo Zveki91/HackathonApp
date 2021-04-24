@@ -68,7 +68,14 @@ namespace HackathonApp.Controllers
             var result = await _companies.GetCompanyData(companyId);
             return Ok(result);
         }
-        
-        
+
+        [HttpGet("{companyId:guid}/transactions")]
+        public async Task<ActionResult<object>> GetTransactionsOfCompany(Guid companyId)
+        {
+            //TODO implenment
+            return Ok(null);
+        }
+
+
     }
 }

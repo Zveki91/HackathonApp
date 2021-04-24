@@ -10,8 +10,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace HackathonApp.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20210424080528_add purchase-to-article relation")]
-    partial class addpurchasetoarticlerelation
+    [Migration("20210424154035_initial migration")]
+    partial class initialmigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -83,7 +83,7 @@ namespace HackathonApp.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("character varying(256)");
 
-                    b.Property<string>("WalletId")
+                    b.Property<string>("Wallet")
                         .HasColumnType("text");
 
                     b.HasKey("Id");
@@ -176,6 +176,27 @@ namespace HackathonApp.Migrations
                     b.ToTable("Branch");
                 });
 
+            modelBuilder.Entity("HackathonApp.Data.BranchArticles", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("ArticleId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("BranchId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ArticleId");
+
+                    b.HasIndex("BranchId");
+
+                    b.ToTable("BranchArticle");
+                });
+
             modelBuilder.Entity("HackathonApp.Data.BranchManager", b =>
                 {
                     b.Property<Guid>("Id")
@@ -228,25 +249,6 @@ namespace HackathonApp.Migrations
                     b.ToTable("Company");
                 });
 
-            modelBuilder.Entity("HackathonApp.Data.CompanyService", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid?>("CompanyId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CompanyId");
-
-                    b.ToTable("CompanyService");
-                });
-
             modelBuilder.Entity("HackathonApp.Data.Discount", b =>
                 {
                     b.Property<Guid>("Id")
@@ -254,6 +256,9 @@ namespace HackathonApp.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<Guid?>("ArticleId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("BranchId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("Name")
@@ -265,6 +270,8 @@ namespace HackathonApp.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ArticleId");
+
+                    b.HasIndex("BranchId");
 
                     b.ToTable("Discount");
                 });
@@ -296,6 +303,9 @@ namespace HackathonApp.Migrations
 
                     b.Property<Guid?>("CustomerId")
                         .HasColumnType("uuid");
+
+                    b.Property<int>("TokenAmount")
+                        .HasColumnType("integer");
 
                     b.Property<decimal>("TotalPrice")
                         .HasColumnType("numeric");
@@ -483,6 +493,21 @@ namespace HackathonApp.Migrations
                     b.Navigation("Company");
                 });
 
+            modelBuilder.Entity("HackathonApp.Data.BranchArticles", b =>
+                {
+                    b.HasOne("HackathonApp.Data.Article", "Article")
+                        .WithMany()
+                        .HasForeignKey("ArticleId");
+
+                    b.HasOne("HackathonApp.Data.Branch", "Branch")
+                        .WithMany("Articles")
+                        .HasForeignKey("BranchId");
+
+                    b.Navigation("Article");
+
+                    b.Navigation("Branch");
+                });
+
             modelBuilder.Entity("HackathonApp.Data.BranchManager", b =>
                 {
                     b.HasOne("HackathonApp.Data.ApplicationUser", "User")
@@ -501,20 +526,19 @@ namespace HackathonApp.Migrations
                     b.Navigation("Manager");
                 });
 
-            modelBuilder.Entity("HackathonApp.Data.CompanyService", b =>
-                {
-                    b.HasOne("HackathonApp.Data.Company", null)
-                        .WithMany("CompanyServices")
-                        .HasForeignKey("CompanyId");
-                });
-
             modelBuilder.Entity("HackathonApp.Data.Discount", b =>
                 {
                     b.HasOne("HackathonApp.Data.Article", "Article")
                         .WithMany()
                         .HasForeignKey("ArticleId");
 
+                    b.HasOne("HackathonApp.Data.Branch", "Branch")
+                        .WithMany("Discounts")
+                        .HasForeignKey("BranchId");
+
                     b.Navigation("Article");
+
+                    b.Navigation("Branch");
                 });
 
             modelBuilder.Entity("HackathonApp.Data.Manager", b =>
@@ -592,11 +616,16 @@ namespace HackathonApp.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("HackathonApp.Data.Branch", b =>
+                {
+                    b.Navigation("Articles");
+
+                    b.Navigation("Discounts");
+                });
+
             modelBuilder.Entity("HackathonApp.Data.Company", b =>
                 {
                     b.Navigation("Branches");
-
-                    b.Navigation("CompanyServices");
 
                     b.Navigation("Employees");
                 });

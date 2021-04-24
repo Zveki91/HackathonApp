@@ -1,10 +1,10 @@
-using System;
+﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace HackathonApp.Migrations
 {
-    public partial class changeallIdstoGuid : Migration
+    public partial class initialmigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -78,12 +78,51 @@ namespace HackathonApp.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ArticlePurchase",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    ArticleId = table.Column<Guid>(type: "uuid", nullable: true),
+                    PurchaseId = table.Column<Guid>(type: "uuid", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ArticlePurchase", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ArticlePurchase_Article_ArticleId",
+                        column: x => x.ArticleId,
+                        principalTable: "Article",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "BranchArticle",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    BranchId = table.Column<Guid>(type: "uuid", nullable: true),
+                    ArticleId = table.Column<Guid>(type: "uuid", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BranchArticle", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_BranchArticle_Article_ArticleId",
+                        column: x => x.ArticleId,
+                        principalTable: "Article",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Discount",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: true),
                     ArticleId = table.Column<Guid>(type: "uuid", nullable: true),
+                    BranchId = table.Column<Guid>(type: "uuid", nullable: true),
                     PriceReduction = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
@@ -209,6 +248,7 @@ namespace HackathonApp.Migrations
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     FirstName = table.Column<string>(type: "text", nullable: true),
                     LastName = table.Column<string>(type: "text", nullable: true),
+                    Wallet = table.Column<string>(type: "text", nullable: true),
                     CompanyId = table.Column<Guid>(type: "uuid", nullable: true),
                     UserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
@@ -264,20 +304,28 @@ namespace HackathonApp.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "CompanyService",
+                name: "Purchase",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Name = table.Column<string>(type: "text", nullable: true),
-                    CompanyId = table.Column<Guid>(type: "uuid", nullable: true)
+                    BranchId = table.Column<Guid>(type: "uuid", nullable: true),
+                    CustomerId = table.Column<Guid>(type: "uuid", nullable: true),
+                    TotalPrice = table.Column<decimal>(type: "numeric", nullable: false),
+                    TokenAmount = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CompanyService", x => x.Id);
+                    table.PrimaryKey("PK_Purchase", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_CompanyService_Company_CompanyId",
-                        column: x => x.CompanyId,
-                        principalTable: "Company",
+                        name: "FK_Purchase_AspNetUsers_CustomerId",
+                        column: x => x.CustomerId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Purchase_Branch_BranchId",
+                        column: x => x.BranchId,
+                        principalTable: "Branch",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -286,6 +334,16 @@ namespace HackathonApp.Migrations
                 name: "IX_Article_CategoryId",
                 table: "Article",
                 column: "CategoryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ArticlePurchase_ArticleId",
+                table: "ArticlePurchase",
+                column: "ArticleId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ArticlePurchase_PurchaseId",
+                table: "ArticlePurchase",
+                column: "PurchaseId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -340,6 +398,16 @@ namespace HackathonApp.Migrations
                 column: "CompanyId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_BranchArticle_ArticleId",
+                table: "BranchArticle",
+                column: "ArticleId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BranchArticle_BranchId",
+                table: "BranchArticle",
+                column: "BranchId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_BranchManager_UserId",
                 table: "BranchManager",
                 column: "UserId");
@@ -350,19 +418,53 @@ namespace HackathonApp.Migrations
                 column: "ManagerId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CompanyService_CompanyId",
-                table: "CompanyService",
-                column: "CompanyId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Discount_ArticleId",
                 table: "Discount",
                 column: "ArticleId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Discount_BranchId",
+                table: "Discount",
+                column: "BranchId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Manager_UserId",
                 table: "Manager",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Purchase_BranchId",
+                table: "Purchase",
+                column: "BranchId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Purchase_CustomerId",
+                table: "Purchase",
+                column: "CustomerId");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_ArticlePurchase_Purchase_PurchaseId",
+                table: "ArticlePurchase",
+                column: "PurchaseId",
+                principalTable: "Purchase",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Restrict);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_BranchArticle_Branch_BranchId",
+                table: "BranchArticle",
+                column: "BranchId",
+                principalTable: "Branch",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Restrict);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Discount_Branch_BranchId",
+                table: "Discount",
+                column: "BranchId",
+                principalTable: "Branch",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Restrict);
 
             migrationBuilder.AddForeignKey(
                 name: "FK_AspNetUserRoles_AspNetUsers_UserId",
@@ -420,6 +522,9 @@ namespace HackathonApp.Migrations
                 table: "Manager");
 
             migrationBuilder.DropTable(
+                name: "ArticlePurchase");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
 
             migrationBuilder.DropTable(
@@ -435,25 +540,28 @@ namespace HackathonApp.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Branch");
-
-            migrationBuilder.DropTable(
-                name: "CompanyService");
+                name: "BranchArticle");
 
             migrationBuilder.DropTable(
                 name: "Discount");
 
             migrationBuilder.DropTable(
-                name: "AspNetRoles");
+                name: "Purchase");
 
             migrationBuilder.DropTable(
-                name: "BranchManager");
+                name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "Article");
 
             migrationBuilder.DropTable(
+                name: "Branch");
+
+            migrationBuilder.DropTable(
                 name: "Category");
+
+            migrationBuilder.DropTable(
+                name: "BranchManager");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

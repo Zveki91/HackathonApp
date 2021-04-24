@@ -13,6 +13,8 @@ namespace HackathonApp.Data
         
         public virtual Branch Branch { get; set; }
         
+        public DateTime Date { get; set; }
+        
         public virtual ApplicationUser Customer { get; set; }
         
         public virtual List<ArticlePurchase> Articles { get; set; }

@@ -81,7 +81,7 @@ namespace HackathonApp.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("character varying(256)");
 
-                    b.Property<string>("WalletId")
+                    b.Property<string>("Wallet")
                         .HasColumnType("text");
 
                     b.HasKey("Id");

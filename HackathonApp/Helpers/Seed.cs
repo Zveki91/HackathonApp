@@ -145,7 +145,7 @@ namespace HackathonApp.Helpers
             
                 if (createCompanyManager1.Succeeded)
                 {
-                    await userManager.AddToRoleAsync(companyManager1, "Employee");
+                    await userManager.AddToRoleAsync(companyManager1, "Administrator");
                     await _context.SaveChangesAsync();
                 }
                 
@@ -153,7 +153,7 @@ namespace HackathonApp.Helpers
             
                 if (createCompanyManager2.Succeeded)
                 {
-                    await userManager.AddToRoleAsync(companyManager2, "Employee");
+                    await userManager.AddToRoleAsync(companyManager2, "Administrator");
                     await _context.SaveChangesAsync();
                 }
                 
@@ -161,7 +161,7 @@ namespace HackathonApp.Helpers
             
                 if (createCompanyManager3.Succeeded)
                 {
-                    await userManager.AddToRoleAsync(companyManager3, "Employee");
+                    await userManager.AddToRoleAsync(companyManager3, "Administrator");
                     await _context.SaveChangesAsync();
                 }
                 
@@ -695,7 +695,7 @@ namespace HackathonApp.Helpers
                    Article = x
                }).ToList();
                
-               branchList[3].Articles = marketBranchArticles.Select(x => new BranchArticles
+               branchList[3].Articles = fArticles.Select(x => new BranchArticles
                {
                    Id = Guid.NewGuid(),
                    Branch = branchList[3],
@@ -703,7 +703,7 @@ namespace HackathonApp.Helpers
                }).ToList();
                
                
-               branchList[4].Articles = marketBranchArticles.Select(x => new BranchArticles
+               branchList[4].Articles = kArticles.Select(x => new BranchArticles
                {
                    Id = Guid.NewGuid(),
                    Branch = branchList[4],

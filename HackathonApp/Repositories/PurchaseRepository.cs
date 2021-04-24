@@ -49,7 +49,12 @@ namespace HackathonApp.Repositories
                 Id = newPurchase.Id,
                 BranchId = newPurchase.Branch.Id,
                 UserId = newPurchase.Customer.Id,
-                Articles = newPurchase.Articles.Select(x => x.Id).ToList(),
+                Articles = newPurchase.Articles.Select(x => new ArticleDto
+                {
+                    Id = x.Article.Id,
+                    Name = x.Article.Name,
+                    Price = x.Article.Price
+                }).ToList(),
                 TotalPrice = newPurchase.TotalPrice
             };
 
@@ -69,7 +74,12 @@ namespace HackathonApp.Repositories
                 Id = purchase.Id,
                 BranchId = purchase.Branch.Id,
                 UserId = purchase.Customer.Id,
-                Articles = purchase.Articles.Select(x => x.Id).ToList(),
+                Articles = purchase.Articles.Select(x => new ArticleDto
+                {
+                    Id = x.Article.Id,
+                    Name = x.Article.Name,
+                    Price = x.Article.Price
+                }).ToList(),
                 TotalPrice = purchase.TotalPrice
             };
         }
@@ -90,7 +100,12 @@ namespace HackathonApp.Repositories
                 Id = x.Id,
                 BranchId = x.Branch.Id,
                 UserId = x.Customer.Id,
-                Articles = x.Articles.Select(x => x.Id).ToList(),
+                Articles = x.Articles.Select(x => new ArticleDto
+                {
+                    Id = x.Article.Id,
+                    Name = x.Article.Name,
+                    Price = x.Article.Price
+                }).ToList(),
                 TotalPrice = x.TotalPrice
             }).ToList();
 
@@ -112,7 +127,12 @@ namespace HackathonApp.Repositories
                 Id = x.Id,
                 BranchId = x.Branch.Id,
                 UserId = x.Customer.Id,
-                Articles = x.Articles.Select(x => x.Id).ToList(),
+                Articles = x.Articles.Select(x => new ArticleDto
+                {
+                    Id = x.Article.Id,
+                    Name = x.Article.Name,
+                    Price = x.Article.Price
+                }).ToList(),
                 TotalPrice = x.TotalPrice
             }).ToList();
 
