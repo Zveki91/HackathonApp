@@ -21,6 +21,8 @@ namespace HackathonApp.Data
         
         public decimal TotalPrice { get; set; }
         
+        public decimal DiscountedPrice { get; set; }
+        
         public int TokenAmount { get; set; }
     }
 }
