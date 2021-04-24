@@ -14,8 +14,9 @@ namespace HackathonApp.Data
 
         public virtual Article Article { get; set; }
         
-        public int PriceReduction { get; set; }
+        public virtual Branch Branch { get; set; }
         
+        public int PriceReduction { get; set; }
         
     }
 }

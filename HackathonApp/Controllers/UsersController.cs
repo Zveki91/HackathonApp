@@ -8,11 +8,11 @@ using Microsoft.Extensions.Configuration;
 namespace HackathonApp.Controllers
 {
     [Route("api/users")]
-    public class UserController : BaseController
+    public class UsersController : BaseController
     {
         private readonly IUsers _users;
         
-        public UserController(IConfiguration configuration, IUsers users) : base(configuration)
+        public UsersController(IConfiguration configuration, IUsers users) : base(configuration)
         {
             _users = users;
         }
@@ -40,6 +40,6 @@ namespace HackathonApp.Controllers
             var result = await _users.GetUserDetails(UserId, Role);
             return Ok(result);
         }
-      
+
     }
 }

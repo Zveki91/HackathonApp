@@ -36,7 +36,6 @@ namespace HackathonApp.Repositories
                 Id = Guid.NewGuid(),
                 Name = data.Name,
                 Address = data.Address,
-                CompanyServices = data.CompanyServices,
                 Branches = null,
                 Manager = manager,
                 Employees = null
@@ -63,7 +62,6 @@ namespace HackathonApp.Repositories
                 .ThenInclude(x => x.BranchManager)
                 .ThenInclude(x => x.User)
                 .Include(x => x.Employees)
-                .Include(x => x.CompanyServices)
                 .FirstOrDefaultAsync(x => x.Id == id);
             if (company == null) throw new MyNotFoundException("Company not found.", 404);
             var companyDetails = new CompanyDto
@@ -112,6 +110,12 @@ namespace HackathonApp.Repositories
             return result;
         }
         
+        
+        /// <summary>
+        /// Create new manager
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
         public async Task<Guid> CreateManager(CreateManagerDto data)
         {
             try
@@ -136,6 +140,11 @@ namespace HackathonApp.Repositories
             }
         }
 
+        /// <summary>
+        /// Create new Branch Manager
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
         public async Task<Guid> CreateBranchManager(CreateManagerDto data)
         {
             var user = await _userManager.FindByIdAsync(data.UserId.ToString());
@@ -150,6 +159,12 @@ namespace HackathonApp.Repositories
             return manager.Id;
         }
 
+        /// <summary>
+        /// Create new Branch for company
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        /// <exception cref="MyNotFoundException"></exception>
         public async Task<Guid> CreateBranch(CreateBranchDto data)
         {
             var company = await _context.Company.FirstOrDefaultAsync(x => x.Id == data.CompanyId);

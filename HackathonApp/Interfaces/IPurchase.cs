@@ -7,9 +7,9 @@ namespace HackathonApp.Interfaces
 {
     public interface IPurchase
     {
-        Task<Guid> CreatePurchase(CreatePurchaseDto data);
+        Task<PurchaseDto> CreatePurchase(CreatePurchaseDto data);
 
-        Task<PurchaseDto> GetPurchase(Guid id);
+        Task<PurchaseDto> GetPurchase(Guid id, Guid userId);
 
         Task<PaginatedList<PurchaseDto>> GetListOfPurchasesForCompany(Guid companyId);
 

@@ -10,9 +10,7 @@ namespace HackathonApp.Dto
         public string Name { get; set; }
         
         public string Address { get; set; }
-        
-        public List<CompanyService> CompanyServices { get; set; }
-        
+
         public Guid ManagerId { get; set; }
         
         public List<ApplicationUser>? Employees { get; set; }

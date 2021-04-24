@@ -15,8 +15,6 @@ namespace HackathonApp.Data
         
         public string Address { get; set; }
 
-        public virtual List<CompanyService> CompanyServices { get; set; }
-        
         public virtual List<Branch> Branches { get; set; }
         
         public virtual Manager Manager { get; set; }

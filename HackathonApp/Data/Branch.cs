@@ -12,6 +12,10 @@ namespace HackathonApp.Data
         public string Location { get; set; }
 
         public virtual Company Company { get; set; }
+        
+        public virtual List<Discount> Discounts { get; set; }
+        
+        public virtual List<BranchArticles> Articles { get; set; }
 
         public virtual BranchManager BranchManager { get; set; }
         

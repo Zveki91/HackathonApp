@@ -4,12 +4,16 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace HackathonApp.Data
 {
-    public class CompanyService
+    public class BranchArticles
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }
-
-        public string Name { get; set; }
+        
+        [ForeignKey("BranchId")]
+        public virtual Branch Branch { get; set; }
+        
+        [ForeignKey("ArticleId")]
+        public virtual Article Article { get; set; }
     }
 }

@@ -16,13 +16,13 @@ namespace HackathonApp.Data
 
         public DbSet<Company> Company { get; set; }
 
-        public DbSet<CompanyService> CompanyService { get; set; }
-
         public DbSet<Category> Category { get; set; }
 
         public DbSet<Article> Article { get; set; }
         
         public DbSet<BranchManager> BranchManager { get; set; }
+        
+        public DbSet<BranchArticles> BranchArticle { get; set; }
         
         public DbSet<Manager> Manager { get; set; }
         

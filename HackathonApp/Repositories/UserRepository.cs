@@ -18,7 +18,8 @@ namespace HackathonApp.Repositories
         private readonly TokenHelper _tokenHelper;
         private readonly DataContext _context;
 
-        public UserRepository(SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager, TokenHelper tokenHelper, RoleManager<Role> roleManager, DataContext context)
+        public UserRepository(SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager,
+            TokenHelper tokenHelper, RoleManager<Role> roleManager, DataContext context)
         {
             _signInManager = signInManager;
             _userManager = userManager;
