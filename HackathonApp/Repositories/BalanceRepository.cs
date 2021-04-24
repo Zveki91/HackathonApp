@@ -26,14 +26,14 @@ namespace HackathonApp.Repositories
         {
             var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == userId);
             var balance = await _contract.BalanceOf(user.Wallet);
-            return Convert.ToInt32(balance);
+            return (int)balance;
         }
 
         public async Task<decimal> GetTokenValue(Guid userId)
         {
             var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == userId);
             var balance = await _contract.BalanceOf(user.Wallet);
-            return Convert.ToDecimal(balance) * (decimal) 0.04;
+            return (decimal)balance * (decimal) 0.04;
         }
 
         public async Task<int> GetLastIncome(Guid userId)
