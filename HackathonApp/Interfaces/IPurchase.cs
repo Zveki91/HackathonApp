@@ -13,6 +13,6 @@ namespace HackathonApp.Interfaces
 
         Task<PaginatedList<PurchaseDto>> GetListOfPurchasesForCompany(Guid companyId);
 
-        Task<PaginatedList<PurchaseDto>> GetLifOfPurchasesForUser(Guid userId);
+        Task<PaginatedList<PurchaseDto>> GetListOfPurchasesForUser(Guid userId);
     }
 }

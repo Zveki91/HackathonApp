@@ -44,7 +44,7 @@ namespace HackathonApp.Repositories
                 Id = Guid.NewGuid(),
                 Branch = branch,
                 Customer = customer,
-                TotalPrice = articles.Sum(x => x.Price),
+                TotalPrice = 0,
                 TokenAmount = 0,
                 Articles = new List<ArticlePurchase>(),
                 Date = DateTime.UtcNow
@@ -67,6 +67,7 @@ namespace HackathonApp.Repositories
                     Price = price,
                     Purchase = newPurchase
                 });
+                newPurchase.TotalPrice = newPurchase.Articles.Sum(x => x.Price);
             }
 
             int tokenAmount = await CalculateTokenReward.GetRewardAmount(newPurchase);
@@ -145,7 +146,7 @@ namespace HackathonApp.Repositories
             return new PaginatedList<PurchaseDto>(results.AsQueryable(), results.Count);
         }
 
-        public async Task<PaginatedList<PurchaseDto>> GetLifOfPurchasesForUser(Guid userId)
+        public async Task<PaginatedList<PurchaseDto>> GetListOfPurchasesForUser(Guid userId)
         {
             var purchaseList = await _context.Purchase
                 .Include(x => x.Branch)

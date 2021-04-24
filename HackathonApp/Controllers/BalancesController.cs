@@ -2,12 +2,15 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using HackathonApp.Dto;
 using HackathonApp.Interfaces;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Nethereum.BlockchainProcessing.BlockStorage.Repositories;
 
 namespace HackathonApp.Controllers
 {
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class BalancesController : BaseController
     {
         public BalancesController(IConfiguration configuration, IBalance balance) : base(configuration)
