@@ -40,7 +40,8 @@ namespace HackathonApp.Repositories
                     Id = Guid.NewGuid(),
                     UserName = data.Email,
                     FirstName = data.FirstName,
-                    LastName = data.LastName
+                    LastName = data.LastName,
+                    Wallet = WalletGenerator.Create()
                 };
 
                 if (data.CompanyName != null)

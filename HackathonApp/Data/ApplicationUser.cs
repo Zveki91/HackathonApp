@@ -9,6 +9,6 @@ namespace HackathonApp.Data
 
         public string LastName { get; set; }
         
-        public string WalletId { get; set; }
+        public string Wallet { get; set; }
     }
 }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using HackathonApp.Data;
 using Microsoft.AspNetCore.Identity;
@@ -53,6 +54,7 @@ namespace HackathonApp.Helpers
                 LastName = "Manager",
                 UserName = "manager@company.com",
                 Email = "manager@company.com",
+                Wallet = WalletGenerator.Create()
             };
             var companyManager2 = new ApplicationUser()
             {
@@ -60,6 +62,7 @@ namespace HackathonApp.Helpers
                 LastName = "Manager",
                 UserName = "manager@company2.com",
                 Email = "manager@company2.com",
+                Wallet = WalletGenerator.Create()
             };
             var companyManager3 = new ApplicationUser()
             {
@@ -67,6 +70,7 @@ namespace HackathonApp.Helpers
                 LastName = "Manager",
                 UserName = "manager@company3.com",
                 Email = "manager@company3.com",
+                Wallet = WalletGenerator.Create()
             };
             var branchManager1 = new ApplicationUser()
             {
@@ -74,6 +78,7 @@ namespace HackathonApp.Helpers
                 LastName = "Manager",
                 UserName = "manager@branch1.com",
                 Email = "manager@branch1.com",
+                Wallet = WalletGenerator.Create()
             };
                var branchManager2 = new ApplicationUser()
               {
@@ -81,6 +86,7 @@ namespace HackathonApp.Helpers
                   LastName = "Manager",
                   UserName = "manager@branch2.com",
                   Email = "manager@branch2.com",
+                  Wallet = WalletGenerator.Create()
               };
                var branchManager3 = new ApplicationUser()
                {
@@ -88,6 +94,7 @@ namespace HackathonApp.Helpers
                    LastName = "Manager",
                    UserName = "manager@branch3.com",
                    Email = "manager@branch3.com",
+                   Wallet = WalletGenerator.Create()
                };
                var customersList = new List<ApplicationUser>()
                {
@@ -97,6 +104,7 @@ namespace HackathonApp.Helpers
                        LastName = "cust 1",
                        UserName = "customer@cust1.com",
                        Email = "customer@cust1.com",
+                       Wallet = WalletGenerator.Create()
                    },
                    new ApplicationUser()
                    {
@@ -104,6 +112,7 @@ namespace HackathonApp.Helpers
                        LastName = "cust 2",
                        UserName = "customer@cust2.com",
                        Email = "customer@cust2.com",
+                       Wallet = WalletGenerator.Create()
                    },
                    new ApplicationUser()
                    {
@@ -111,6 +120,7 @@ namespace HackathonApp.Helpers
                        LastName = "cust 3",
                        UserName = "customer@cust3.com",
                        Email = "customer@cust3.com",
+                       Wallet = WalletGenerator.Create()
                    },
                    new ApplicationUser()
                    {
@@ -118,6 +128,7 @@ namespace HackathonApp.Helpers
                        LastName = "cust 4",
                        UserName = "customer@cust4.com",
                        Email = "customer@cust4.com",
+                       Wallet = WalletGenerator.Create()
                    },
                    new ApplicationUser()
                    {
@@ -125,6 +136,7 @@ namespace HackathonApp.Helpers
                        LastName = "cust 5",
                        UserName = "customer@cust5.com",
                        Email = "customer@cust5.com",
+                       Wallet = WalletGenerator.Create()
                    }
                };
 
@@ -249,8 +261,304 @@ namespace HackathonApp.Helpers
                        Id = Guid.NewGuid(),
                        Name = "Usluga"
                    },
+                   new Category
+                   {
+                       Id = Guid.NewGuid(),
+                       Name = "Prehana"
+                   },
+                   new Category
+                   {
+                       Id = Guid.NewGuid(),
+                       Name = "Ljubimci"
+                   },
+                   new Category
+                   {
+                       Id = Guid.NewGuid(),
+                       Name = "Alat"
+                   },
+                   new Category
+                   {
+                       Id = Guid.NewGuid(),
+                       Name = "Knjige"
+                   },
+                    new Category
+                   {
+                       Id = Guid.NewGuid(),
+                       Name = "Elektronika"
+                   },
+                    new Category
+                   {
+                       Id = Guid.NewGuid(),
+                       Name = "Bijela tehnika"
+                   }
                };
 
+
+               var articleList = new List<Article>()
+               {
+                   new Article
+                   {
+                       Id = Guid.NewGuid(),
+                       Category = categoryList[0],
+                       Name = "Sisanje",
+                       Price = 5,
+                       ImageUrl = null,
+                       Domestic = true
+                   },
+                   new Article
+                   {
+                       Id = Guid.NewGuid(),
+                       Category = categoryList[0],
+                       Name = "Feniranje",
+                       Price = 5,
+                       ImageUrl = null,
+                       Domestic = true
+                   },
+                   new Article
+                   {
+                       Id = Guid.NewGuid(),
+                       Category = categoryList[0],
+                       Name = "Brijanje",
+                       Price = 5,
+                       ImageUrl = null,
+                       Domestic = true
+                   },
+                   new Article
+                   {
+                       Id = Guid.NewGuid(),
+                       Category = categoryList[0],
+                       Name = "Farbanje",
+                       Price = 10,
+                       ImageUrl = null,
+                       Domestic = true
+                   },
+                   new Article
+                   {
+                       Id = Guid.NewGuid(),
+                       Category = categoryList[0],
+                       Name = "Pranje kose",
+                       Price = 5,
+                       ImageUrl = null,
+                       Domestic = true
+                   },
+                   new Article
+                   {
+                       Id = Guid.NewGuid(),
+                       Category = categoryList[0],
+                       Name = "Usluge sivenja",
+                       Price = 5,
+                       ImageUrl = null,
+                       Domestic = true
+                   },
+                   new Article
+                   {
+                       Id = Guid.NewGuid(),
+                       Category = categoryList[0],
+                       Name = "Prodaja odjece",
+                       Price = 10,
+                       ImageUrl = null,
+                       Domestic = true
+                   },
+                   new Article
+                   {
+                       Id = Guid.NewGuid(),
+                       Category = categoryList[1],
+                       Name = "Chips Marbo",
+                       Price = 1,
+                       ImageUrl = null,
+                       Domestic = true
+                   },
+                   new Article
+                   {
+                       Id = Guid.NewGuid(),
+                       Category = categoryList[1],
+                       Name = "Coca-Cola Zero",
+                       Price = 1,
+                       ImageUrl = null,
+                       Domestic = false
+                   },
+                   new Article
+                   {
+                       Id = Guid.NewGuid(),
+                       Category = categoryList[1],
+                       Name = "Brasno T-400 5kg",
+                       Price = 5,
+                       ImageUrl = null,
+                       Domestic = true
+                   },
+                   new Article
+                   {
+                       Id = Guid.NewGuid(),
+                       Category = categoryList[1],
+                       Name = "Ulje Sunce 1l",
+                       Price = 3,
+                       ImageUrl = null,
+                       Domestic = true
+                   },
+                   new Article
+                   {
+                       Id = Guid.NewGuid(),
+                       Category = categoryList[2],
+                       Name = "Hrana za psa 12kg",
+                       Price = 20,
+                       ImageUrl = null,
+                       Domestic = false
+                   },
+                   new Article
+                   {
+                       Id = Guid.NewGuid(),
+                       Category = categoryList[2],
+                       Name = "Hrana za macku 2kg",
+                       Price = 8,
+                       ImageUrl = null,
+                       Domestic = false
+                   },
+                   new Article
+                   {
+                       Id = Guid.NewGuid(),
+                       Category = categoryList[2],
+                       Name = "Akvarijum 30x20",
+                       Price = 30,
+                       ImageUrl = null,
+                       Domestic = false
+                   },
+                   new Article
+                   {
+                       Id = Guid.NewGuid(),
+                       Category = categoryList[3],
+                       Name = "Busilica Bosh",
+                       Price = 55,
+                       ImageUrl = null,
+                       Domestic = false
+                   },
+                   new Article
+                   {
+                       Id = Guid.NewGuid(),
+                       Category = categoryList[3],
+                       Name = "Tacke Limex",
+                       Price = 75,
+                       ImageUrl = null,
+                       Domestic = true
+                   },
+                   new Article
+                   {
+                       Id = Guid.NewGuid(),
+                       Category = categoryList[3],
+                       Name = "Set Alata",
+                       Price = 40,
+                       ImageUrl = null,
+                       Domestic = false
+                   },
+                   new Article
+                   {
+                       Id = Guid.NewGuid(),
+                       Category = categoryList[4],
+                       Name = "Knjiga Java 1",
+                       Price = 15,
+                       ImageUrl = null,
+                       Domestic = false
+                   },
+                   new Article
+                   {
+                       Id = Guid.NewGuid(),
+                       Category = categoryList[4],
+                       Name = "Knjiga Java 2",
+                       Price = 25,
+                       ImageUrl = null,
+                       Domestic = false
+                   },
+                   new Article
+                   {
+                       Id = Guid.NewGuid(),
+                       Category = categoryList[4],
+                       Name = "Knjiga JS Vanila",
+                       Price = 35,
+                       ImageUrl = null,
+                       Domestic = false
+                   },
+                   new Article
+                   {
+                       Id = Guid.NewGuid(),
+                       Category = categoryList[4],
+                       Name = "Pisite los PHP code",
+                       Price = 15,
+                       ImageUrl = null,
+                       Domestic = false
+                   },
+                   new Article
+                   {
+                       Id = Guid.NewGuid(),
+                       Category = categoryList[5],
+                       Name = "Smart Phone 1",
+                       Price = 105,
+                       ImageUrl = null,
+                       Domestic = false
+                   },
+                   new Article
+                   {
+                       Id = Guid.NewGuid(),
+                       Category = categoryList[5],
+                       Name = "Smart Phone 2",
+                       Price = 125,
+                       ImageUrl = null,
+                       Domestic = false
+                   },
+                   new Article
+                   {
+                       Id = Guid.NewGuid(),
+                       Category = categoryList[5],
+                       Name = "Smart Phone 3",
+                       Price = 205,
+                       ImageUrl = null,
+                       Domestic = false
+                   },
+                   new Article
+                   {
+                       Id = Guid.NewGuid(),
+                       Category = categoryList[5],
+                       Name = "Tablet 1",
+                       Price = 165,
+                       ImageUrl = null,
+                       Domestic = false
+                   },
+                   new Article
+                   {
+                       Id = Guid.NewGuid(),
+                       Category = categoryList[5],
+                       Name = "Tablet 2",
+                       Price = 185,
+                       ImageUrl = null,
+                       Domestic = false
+                   },
+                   new Article
+                   {
+                       Id = Guid.NewGuid(),
+                       Category = categoryList[6],
+                       Name = "Sporet Gorenje",
+                       Price = 255,
+                       ImageUrl = null,
+                       Domestic = true
+                   },
+                   new Article
+                   {
+                       Id = Guid.NewGuid(),
+                       Category = categoryList[6],
+                       Name = "Frizider Gorenje",
+                       Price = 255,
+                       ImageUrl = null,
+                       Domestic = true
+                   },
+                   new Article
+                   {
+                       Id = Guid.NewGuid(),
+                       Category = categoryList[6],
+                       Name = "Frizider Bosch",
+                       Price = 255,
+                       ImageUrl = null,
+                       Domestic = false
+                   }
+               };
+               
                #endregion
             
 
@@ -310,7 +618,6 @@ namespace HackathonApp.Helpers
                        Location = "Banja Luka",
                        Company = companyList[0],
                        Discounts = null,
-                       Articles = null,
                        BranchManager = bManagersList[0]
                    },
                    new Branch
@@ -332,19 +639,89 @@ namespace HackathonApp.Helpers
                        Discounts = null,
                        Articles = null,
                        BranchManager = bManagersList[2]
-                   }
+                   },
+                   new Branch
+                   {
+                       Id = Guid.NewGuid(),
+                       Name = "Poslovna jedinica Borik",
+                       Location = "Banja Luka",
+                       Company = companyList[1],
+                       Discounts = null,
+                       Articles = null,
+                       BranchManager = bManagersList[3]
+                   },
+                   new Branch
+                   {
+                       Id = Guid.NewGuid(),
+                       Name = "Poslovna jedinica Borik",
+                       Location = "Banja Luka",
+                       Company = companyList[2],
+                       Discounts = null,
+                       Articles = null,
+                       BranchManager = bManagersList[4]
+                   },
+                   
                };
                
+               var marketCategoriesList =  categoryList.Where(x => x.Id != categoryList[0].Id).Select(x => x.Id).ToList();
+               var marketBranchArticles = articleList.Where(x => marketCategoriesList.Contains(x.Category.Id)).ToList();
 
-               #endregion
+               var fArticles = articleList.Where(x =>
+                       x.Category.Id == categoryList[0].Id && x.Name != "Usluge sivenja" || x.Name != "Prodaja odjece")
+                   .ToList();
                
-              
+               var kArticles =  articleList.Where(x =>
+                       x.Category.Id == categoryList[0].Id && x.Name == "Usluge sivenja" || x.Name == "Prodaja odjece")
+                   .ToList();
+               
+               branchList[0].Articles = marketBranchArticles.Select(x => new BranchArticles
+               {
+                   Id = Guid.NewGuid(),
+                   Branch = branchList[0],
+                   Article = x
+               }).ToList();
+               
+               branchList[1].Articles = marketBranchArticles.Select(x => new BranchArticles
+               {
+                   Id = Guid.NewGuid(),
+                   Branch = branchList[1],
+                   Article = x
+               }).ToList();
+               
+               branchList[2].Articles = marketBranchArticles.Select(x => new BranchArticles
+               {
+                   Id = Guid.NewGuid(),
+                   Branch = branchList[2],
+                   Article = x
+               }).ToList();
+               
+               branchList[3].Articles = marketBranchArticles.Select(x => new BranchArticles
+               {
+                   Id = Guid.NewGuid(),
+                   Branch = branchList[3],
+                   Article = x
+               }).ToList();
+               
+               
+               branchList[4].Articles = marketBranchArticles.Select(x => new BranchArticles
+               {
+                   Id = Guid.NewGuid(),
+                   Branch = branchList[4],
+                   Article = x
+               }).ToList();
+               
+               #endregion
 
+
+
+               await _context.Category.AddRangeAsync(categoryList);
+               await _context.Article.AddRangeAsync(articleList);
                await _context.Company.AddRangeAsync(companyList);
                await _context.Manager.AddRangeAsync(newManagerList);
                await _context.Branch.AddRangeAsync(branchList);
                await _context.BranchManager.AddRangeAsync(bManagersList);
 
+               await _context.SaveChangesAsync();
         }
     }
 }
