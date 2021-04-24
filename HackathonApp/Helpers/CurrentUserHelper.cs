@@ -27,7 +27,7 @@ namespace HackathonApp.Helpers
                 LastName = user.LastName,
                 Email = user.UserName,
                 Role = role,
-                Company = company.Name
+                Company = company?.Name ?? ""
             };
 
         }

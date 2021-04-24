@@ -12,27 +12,48 @@ using JwtRegisteredClaimNames = Microsoft.IdentityModel.JsonWebTokens.JwtRegiste
 
 namespace HackathonApp.Helpers
 {
+    /// <summary>
+    /// Token Helper
+    /// </summary>
     public class TokenHelper
     {
-        private readonly IConfiguration _configuration;
-        private readonly UserManager<ApplicationUser> _userManager;
+        /// <summary>
+        /// Configuration DI
+        /// </summary>
+        public readonly IConfiguration Configuration;
 
-        public TokenHelper(IConfiguration configuration, UserManager<ApplicationUser> userManager)
+        /// <summary>
+        /// Constructor for TokenHelper
+        /// </summary>
+        /// <param name="configuration"></param>
+        public TokenHelper(IConfiguration configuration)
         {
-            _configuration = configuration;
-            _userManager = userManager;
+            Configuration = configuration;
         }
-        
+
+        /// <summary>
+        /// Helper method for creating jwt token
+        /// </summary>
+        /// <param name="user"></param>
+        /// <param name="role"></param>
+        /// <returns></returns>
         public async Task<object> GenerateJwtToken(ApplicationUser user, string role)
         {
-            var claims =await  _userManager.GetClaimsAsync(user);
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JwtKey"]));
+            var claims = new List<Claim>
+            {
+                new Claim(JwtRegisteredClaimNames.NameId, user.Id.ToString()),
+                new Claim(JwtRegisteredClaimNames.Sub, user.Email),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim(ClaimTypes.Role, role),
+                new Claim(ClaimTypes.NameIdentifier, user.UserName)
+            };
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JwtKey"]));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-            var expires = DateTime.Now.AddDays(Convert.ToDouble(_configuration["JwtExpireDays"]));
+            var expires = DateTime.Now.AddDays(Convert.ToDouble(Configuration["JwtExpireDays"]));
 
             var token = new JwtSecurityToken(
-                _configuration["JwtIssuer"],
-                _configuration["JwtIssuer"],
+                Configuration["JwtIssuer"],
+                Configuration["JwtIssuer"],
                 claims,
                 expires: expires,
                 signingCredentials: creds

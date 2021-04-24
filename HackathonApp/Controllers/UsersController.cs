@@ -2,11 +2,14 @@ using System;
 using System.Threading.Tasks;
 using HackathonApp.Dto;
 using HackathonApp.Interfaces;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 
 namespace HackathonApp.Controllers
 {
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [Route("api/users")]
     public class UsersController : BaseController
     {
@@ -25,6 +28,7 @@ namespace HackathonApp.Controllers
             return Ok(result);
         }
 
+        [AllowAnonymous]
         [HttpPost("login")]
         public async Task<ActionResult<LoginTokenDto>> LoginUser(LoginDto data)
         {

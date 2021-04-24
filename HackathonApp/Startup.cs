@@ -153,6 +153,8 @@ namespace HackathonApp
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "HackathonApp v1"));
             }
+            app.UseAuthorization();
+
              // new Seed(context, serviceProvider, Configuration).SeedDb().GetAwaiter().GetResult();
             app.UseMiddleware(typeof(ExceptionHandlerMiddleware));
             app.UseHttpsRedirection();

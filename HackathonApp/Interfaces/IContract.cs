@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using NBitcoin.BouncyCastle.Math;
 
 namespace HackathonApp.Interfaces
 {
@@ -29,6 +30,6 @@ namespace HackathonApp.Interfaces
         /// </summary>
         /// <param name="address"></param>
         /// <returns></returns>
-        public Task<decimal> BalanceOf(string address);
+        public Task<BigInteger> BalanceOf(string address);
     }
 }

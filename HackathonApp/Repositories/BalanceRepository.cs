@@ -5,10 +5,12 @@ using System.Threading.Tasks;
 using HackathonApp.Data;
 using HackathonApp.Dto;
 using HackathonApp.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 
 namespace HackathonApp.Repositories
 {
+    [Authorize]
     public class BalanceRepository : IBalance
     {
         private readonly IContract _contract;
@@ -31,7 +33,7 @@ namespace HackathonApp.Repositories
         {
             var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == userId);
             var balance = await _contract.BalanceOf(user.Wallet);
-            return balance * (decimal) 0.04;
+            return Convert.ToDecimal(balance) * (decimal) 0.04;
         }
 
         public async Task<int> GetLastIncome(Guid userId)

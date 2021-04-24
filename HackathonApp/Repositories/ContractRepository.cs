@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using NBitcoin.BouncyCastle.Math;
 using static HackathonApp.Interfaces.Contract.H4PToken;
 
 namespace HackathonApp.Repositories
@@ -31,14 +32,14 @@ namespace HackathonApp.Repositories
             _contractAddress = configuration["ContractAddress"];
         }
 
-        public async Task<decimal> BalanceOf(string address)
+        public async Task<BigInteger> BalanceOf(string address)
         {
             var balanceQuery = new BalanceOfFunction()
             {
                 Account = address
             };
             var balanceHandler = _web3.Eth.GetContractQueryHandler<BalanceOfFunction>();
-            return await balanceHandler.QueryAsync<decimal>(_contractAddress, balanceQuery);
+            return await balanceHandler.QueryAsync<BigInteger>(_contractAddress, balanceQuery);
         }
 
         public async Task<string> BurnToken(string address, decimal amount)
