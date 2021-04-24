@@ -97,21 +97,16 @@ namespace HackathonApp.Repositories
 
         public async Task<List<DailyTokens>> GetAmountOfTokensEarnedPerDay(Guid userId)
         {
-            //     var transactions = await _context.Purchase
-            //         .Include(x => x.Customer)
-            //         .Where(x => x.Customer.Id == userId && x.Date.Month == DateTime.Now.Month)
-            //         .ToListAsync();
-            //
-            //     var groupedTransactions = transactions
-            //         .GroupBy(x => x.Date.Day, x => x.TokenAmount,
-            //             (key, e) => new {Day = key, Tokens = e.Sum()});
-            //     
-            //     var result = groupedTransactions.Select(x => new DailyTokens
-            //     {
-            //         Day = x.Day,
-            //         Tokens =
-            //     })
-            return null;
+            var transactions = await _context.Purchase
+                .Include(x => x.Customer)
+                .Where(x => x.Customer.Id == userId && x.Date.Month == DateTime.Now.Month)
+                .GroupBy(x => x.Date.Day,(key, e)=> new DailyTokens
+                {
+                    Day = key,
+                    Tokens = e.Sum(t => t.TokenAmount)
+                })
+                .ToListAsync();
+            return transactions;
         }
     }
 }
