@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using HackathonApp.Helpers;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -35,7 +36,6 @@ namespace HackathonApp.Controllers
         [Route("redeem")]
         public ActionResult<object> RedeemTokens([FromBody]object redeemRequest)
         {
-            ContractService.MintToken("", 10);
             return Ok();
         }
     }
