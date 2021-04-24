@@ -6,143 +6,177 @@ namespace HackathonApp.Interfaces.Contract
 {
     public class H4PToken
     {
-        [Function("approve", "bool")]
-        public class ApproveFunction : FunctionMessage
-        {
-            [Parameter("address", "spender", 1)]
-            public string Spender { get; set; }
-            [Parameter("uint256", "amount", 2)]
-            public BigInteger Amount { get; set; }
-        }
-
-        [Function("decreaseAllowance", "bool")]
-        public class DecreaseAllowanceFunction : FunctionMessage
-        {
-            [Parameter("address", "spender", 1)]
-            public string Spender { get; set; }
-            [Parameter("uint256", "subtractedValue", 2)]
-            public BigInteger SubtractedValue { get; set; }
-        }
-
-        [Function("increaseAllowance", "bool")]
-        public class IncreaseAllowanceFunction : FunctionMessage
-        {
-            [Parameter("address", "spender", 1)]
-            public string Spender { get; set; }
-            [Parameter("uint256", "addedValue", 2)]
-            public BigInteger AddedValue { get; set; }
-        }
-
-        [Function("transfer", "bool")]
-        public class TransferFunction : FunctionMessage
-        {
-            [Parameter("address", "recipient", 1)]
-            public string Recipient { get; set; }
-            [Parameter("uint256", "amount", 2)]
-            public BigInteger Amount { get; set; }
-        }
-
-        [Function("transferFrom", "bool")]
-        public class TransferFromFunction : FunctionMessage
-        {
-            [Parameter("address", "sender", 1)]
-            public string Sender { get; set; }
-            [Parameter("address", "recipient", 2)]
-            public string Recipient { get; set; }
-            [Parameter("uint256", "amount", 3)]
-            public BigInteger Amount { get; set; }
-        }
-
-        [Function("allowance", "uint256")]
-        public class AllowanceFunction : FunctionMessage
-        {
-            [Parameter("address", "owner", 1)]
-            public string Owner { get; set; }
-            [Parameter("address", "spender", 2)]
-            public string Spender { get; set; }
-        }
+        public partial class BalanceOfFunction : BalanceOfFunctionBase { }
 
         [Function("balanceOf", "uint256")]
-        public class BalanceOfFunction : FunctionMessage
+        public class BalanceOfFunctionBase : FunctionMessage
         {
             [Parameter("address", "account", 1)]
-            public string Account { get; set; }
+            public virtual string Account { get; set; }
         }
+
+        public partial class BurnFunction : BurnFunctionBase { }
+
+        [Function("burn", "bool")]
+        public class BurnFunctionBase : FunctionMessage
+        {
+            [Parameter("uint256", "_value", 1)]
+            public virtual BigInteger Value { get; set; }
+            [Parameter("address", "_from", 2)]
+            public virtual string From { get; set; }
+        }
+
+        public partial class DecimalsFunction : DecimalsFunctionBase { }
 
         [Function("decimals", "uint8")]
-        public class DecimalsFunction : FunctionMessage { }
+        public class DecimalsFunctionBase : FunctionMessage
+        {
+
+        }
+
+        public partial class MintFunction : MintFunctionBase { }
+
+        [Function("mint", "bool")]
+        public class MintFunctionBase : FunctionMessage
+        {
+            [Parameter("uint256", "_value", 1)]
+            public virtual BigInteger Value { get; set; }
+            [Parameter("address", "_to", 2)]
+            public virtual string To { get; set; }
+        }
+
+        public partial class NameFunction : NameFunctionBase { }
 
         [Function("name", "string")]
-        public class NameFunction : FunctionMessage { }
+        public class NameFunctionBase : FunctionMessage
+        {
+
+        }
+
+        public partial class SymbolFunction : SymbolFunctionBase { }
 
         [Function("symbol", "string")]
-        public class SymbolFunction : FunctionMessage { }
+        public class SymbolFunctionBase : FunctionMessage
+        {
+
+        }
+
+        public partial class TotalSupplyFunction : TotalSupplyFunctionBase { }
 
         [Function("totalSupply", "uint256")]
-        public class TotalSupplyFunction : FunctionMessage { }
+        public class TotalSupplyFunctionBase : FunctionMessage
+        {
+
+        }
+
+        public partial class TransferFunction : TransferFunctionBase { }
+
+        [Function("transfer", "bool")]
+        public class TransferFunctionBase : FunctionMessage
+        {
+            [Parameter("address", "recipient", 1)]
+            public virtual string Recipient { get; set; }
+            [Parameter("uint256", "amount", 2)]
+            public virtual BigInteger Amount { get; set; }
+        }
+
+        public partial class TransferFromFunction : TransferFromFunctionBase { }
+
+        [Function("transferFrom", "bool")]
+        public class TransferFromFunctionBase : FunctionMessage
+        {
+            [Parameter("address", "sender", 1)]
+            public virtual string Sender { get; set; }
+            [Parameter("address", "recipient", 2)]
+            public virtual string Recipient { get; set; }
+            [Parameter("uint256", "amount", 3)]
+            public virtual BigInteger Amount { get; set; }
+        }
+
+        public partial class ApprovalEventDTO : ApprovalEventDTOBase { }
 
         [Event("Approval")]
-        public class ApprovalEventDTO : IEventDTO
+        public class ApprovalEventDTOBase : IEventDTO
         {
             [Parameter("address", "owner", 1, true)]
-            public string Owner { get; set; }
+            public virtual string Owner { get; set; }
             [Parameter("address", "spender", 2, true)]
-            public string Spender { get; set; }
+            public virtual string Spender { get; set; }
             [Parameter("uint256", "value", 3, false)]
-            public BigInteger Value { get; set; }
+            public virtual BigInteger Value { get; set; }
         }
+
+        public partial class TransferEventDTO : TransferEventDTOBase { }
 
         [Event("Transfer")]
-        public class TransferEventDTO : IEventDTO
+        public class TransferEventDTOBase : IEventDTO
         {
             [Parameter("address", "from", 1, true)]
-            public string From { get; set; }
+            public virtual string From { get; set; }
             [Parameter("address", "to", 2, true)]
-            public string To { get; set; }
+            public virtual string To { get; set; }
             [Parameter("uint256", "value", 3, false)]
-            public BigInteger Value { get; set; }
+            public virtual BigInteger Value { get; set; }
         }
 
+        public partial class AllowanceOutputDTO : AllowanceOutputDTOBase { }
+
         [FunctionOutput]
-        public class AllowanceOutputDTO : IFunctionOutputDTO
+        public class AllowanceOutputDTOBase : IFunctionOutputDTO
         {
             [Parameter("uint256", "", 1)]
-            public BigInteger ReturnValue1 { get; set; }
+            public virtual BigInteger ReturnValue1 { get; set; }
         }
 
+
+
+        public partial class BalanceOfOutputDTO : BalanceOfOutputDTOBase { }
+
         [FunctionOutput]
-        public class BalanceOfOutputDTO : IFunctionOutputDTO
+        public class BalanceOfOutputDTOBase : IFunctionOutputDTO
         {
             [Parameter("uint256", "", 1)]
-            public BigInteger ReturnValue1 { get; set; }
+            public virtual BigInteger ReturnValue1 { get; set; }
         }
 
+
+
+        public partial class DecimalsOutputDTO : DecimalsOutputDTOBase { }
+
         [FunctionOutput]
-        public class DecimalsOutputDTO : IFunctionOutputDTO
+        public class DecimalsOutputDTOBase : IFunctionOutputDTO
         {
             [Parameter("uint8", "", 1)]
-            public byte ReturnValue1 { get; set; }
+            public virtual byte ReturnValue1 { get; set; }
         }
 
+
+
+        public partial class NameOutputDTO : NameOutputDTOBase { }
+
         [FunctionOutput]
-        public class NameOutputDTO : IFunctionOutputDTO
+        public class NameOutputDTOBase : IFunctionOutputDTO
         {
             [Parameter("string", "", 1)]
-            public string ReturnValue1 { get; set; }
+            public virtual string ReturnValue1 { get; set; }
         }
 
+        public partial class SymbolOutputDTO : SymbolOutputDTOBase { }
+
         [FunctionOutput]
-        public class SymbolOutputDTO : IFunctionOutputDTO
+        public class SymbolOutputDTOBase : IFunctionOutputDTO
         {
             [Parameter("string", "", 1)]
-            public string ReturnValue1 { get; set; }
+            public virtual string ReturnValue1 { get; set; }
         }
 
+        public partial class TotalSupplyOutputDTO : TotalSupplyOutputDTOBase { }
+
         [FunctionOutput]
-        public class TotalSupplyOutputDTO : IFunctionOutputDTO
+        public class TotalSupplyOutputDTOBase : IFunctionOutputDTO
         {
             [Parameter("uint256", "", 1)]
-            public BigInteger ReturnValue1 { get; set; }
+            public virtual BigInteger ReturnValue1 { get; set; }
         }
     }
 }
