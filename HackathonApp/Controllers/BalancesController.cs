@@ -4,13 +4,15 @@ using HackathonApp.Dto;
 using HackathonApp.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Nethereum.BlockchainProcessing.BlockStorage.Repositories;
 
 namespace HackathonApp.Controllers
 {
     public class BalancesController : BaseController
     {
-        public BalancesController(IConfiguration configuration) : base(configuration)
+        public BalancesController(IConfiguration configuration, IBalance balance) : base(configuration)
         {
+            _balance = balance;
         }
 
         private readonly IBalance _balance;
@@ -18,7 +20,7 @@ namespace HackathonApp.Controllers
         [HttpGet("tokens-current")]
         public async Task<ActionResult<int>> GetAmountOfTokens()
         {
-            var result = await  _balance.GetAmountOfTokens(UserId);
+            var result = await _balance.GetAmountOfTokens(UserId);
             return Ok(result);
         }
         

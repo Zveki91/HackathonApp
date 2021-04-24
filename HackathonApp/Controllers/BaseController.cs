@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.JsonWebTokens;
+using Nethereum.BlockchainProcessing.BlockStorage.Repositories;
 using Nethereum.JsonRpc.Client;
 using Nethereum.RPC.NonceServices;
 using Nethereum.Signer;
@@ -17,22 +18,6 @@ namespace HackathonApp.Controllers
     [ApiController]
     public class BaseController : Controller
     {
-        private Web3 _web3Cache = null;
-        private Web3 _web3
-        {
-            get
-            {
-                if (_web3Cache != null)
-                    return _web3Cache;
-
-                RpcClient rpcClient = new RpcClient(new Uri(Configuration["NodeUrl"]));
-                Account account = new Account(Configuration["PrivateKey"], Chain.Ropsten);
-                account.NonceService = new InMemoryNonceService(account.Address, rpcClient);
-                _web3Cache = new Web3(account, rpcClient);
-                return _web3;
-            }
-        }
-
         /// <summary>
         /// Constructor for base controller
         /// </summary>
@@ -60,9 +45,6 @@ namespace HackathonApp.Controllers
         /// Configuration that allows access to JWT decoding
         /// </summary>
         protected IConfiguration Configuration { get; }
-
-        protected ContractRepository ContractService =>
-            new ContractRepository(_web3, Configuration["ContractAddress"]);
 
         /// <inheritdoc />
         public override void OnActionExecuting(ActionExecutingContext actionContext)

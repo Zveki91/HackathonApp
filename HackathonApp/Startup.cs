@@ -25,6 +25,11 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Nethereum.JsonRpc.Client;
+using Nethereum.RPC.NonceServices;
+using Nethereum.Signer;
+using Nethereum.Web3;
+using Nethereum.Web3.Accounts;
 
 namespace HackathonApp
 {
@@ -45,10 +50,13 @@ namespace HackathonApp
                 opts.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddScoped<TokenHelper>();
-            
+
+            services.AddScoped<IContract, ContractRepository>();
             services.AddScoped<ICompanies, CompanyRepository>();
             services.AddScoped<IUsers, UserRepository>();
-            
+            services.AddScoped<IBalance, BalanceRepository>();
+
+            // services.AddScoped<IContract, ContractRepository>();
 
             #region Identity
             services.AddIdentity<ApplicationUser, Role>()

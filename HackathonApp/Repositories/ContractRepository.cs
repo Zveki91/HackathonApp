@@ -1,5 +1,10 @@
 ﻿using HackathonApp.Interfaces;
+using Microsoft.Extensions.Configuration;
+using Nethereum.JsonRpc.Client;
+using Nethereum.RPC.NonceServices;
+using Nethereum.Signer;
 using Nethereum.Web3;
+using Nethereum.Web3.Accounts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,10 +19,16 @@ namespace HackathonApp.Repositories
 
         private readonly string _contractAddress;
 
-        public ContractRepository(Web3 web3, string contractAddress)
+        private readonly IConfiguration config;
+
+        public ContractRepository(IConfiguration configuration)
         {
-            _web3 = web3;
-            _contractAddress = contractAddress;
+            config = configuration;
+            RpcClient rpcClient = new RpcClient(new Uri(configuration["NodeUrl"]));
+            Account account = new Account(configuration["PrivateKey"], Chain.Ropsten);
+            account.NonceService = new InMemoryNonceService(account.Address, rpcClient);
+            _web3 = new Web3(account, rpcClient);
+            _contractAddress = configuration["ContractAddress"];
         }
 
         public async Task<decimal> BalanceOf(string address)
