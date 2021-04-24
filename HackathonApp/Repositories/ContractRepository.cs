@@ -8,8 +8,8 @@ using Nethereum.Web3.Accounts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Threading.Tasks;
-using NBitcoin.BouncyCastle.Math;
 using static HackathonApp.Interfaces.Contract.H4PToken;
 
 namespace HackathonApp.Repositories
