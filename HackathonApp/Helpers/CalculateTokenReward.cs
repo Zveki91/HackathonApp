@@ -7,14 +7,15 @@ namespace HackathonApp.Helpers
 {
     public static class CalculateTokenReward
     {
+        /// <summary>
+        /// Gets reward amount based on transaction pric
+        /// </summary>
+        /// <param name="purchase"></param>
+        /// <returns></returns>
         public static async Task<int> GetRewardAmount(Purchase purchase)
         {
-
-            var domestic = purchase.Articles
-                .Select(x => x.Article.Domestic == true).ToList().Count;
-
-            return domestic + ((int)Math.Round(purchase.Articles.Sum(x => x.Article.Price),0) / 5);
-            
+            int tokenCount = (int)Math.Round(purchase.Articles.Sum(x => x.Article.Price), 0) / 5;
+            return purchase.Articles.Any(x => x.Article.Domestic) ? 1 + tokenCount : tokenCount;
         }
     }
 }

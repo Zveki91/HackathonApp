@@ -8,23 +8,34 @@ using System.Threading.Tasks;
 
 namespace HackathonApp.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/loyalty-cards")]
     [ApiController]
     public class LoyaltyCardController : BaseController
     {
         public LoyaltyCardController(IConfiguration configuration) : base(configuration) { }
 
+        /// <summary>
+        /// Invoked on purchase on PoS terminals.
+        /// </summary>
+        /// <param name="purchaseRequest"></param>
+        /// <returns></returns>
         [HttpPost]
+        [Route("submit")]
         public ActionResult<object> SubmitPurchase([FromBody]object purchaseRequest)
         {
-            // Get user from database.
-            // ContractService.MintToken(user.address, purchaseRequest.amount);
             return Ok();
         }
 
+        /// <summary>
+        /// Invoked on purchase when loyalty tokens are used.
+        /// </summary>
+        /// <param name="redeemRequest"></param>
+        /// <returns></returns>
         [HttpPost]
+        [Route("redeem")]
         public ActionResult<object> RedeemTokens([FromBody]object redeemRequest)
         {
+            ContractService.MintToken("", 10);
             return Ok();
         }
     }

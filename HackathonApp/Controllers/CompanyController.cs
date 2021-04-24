@@ -7,7 +7,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace HackathonApp.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/companies")]
     public class CompanyController : BaseController
     {
         private readonly ICompanies _companies;

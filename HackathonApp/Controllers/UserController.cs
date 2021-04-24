@@ -7,11 +7,10 @@ using Microsoft.Extensions.Configuration;
 
 namespace HackathonApp.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/users")]
     public class UserController : BaseController
     {
         private readonly IUsers _users;
-        
         
         public UserController(IConfiguration configuration, IUsers users) : base(configuration)
         {
