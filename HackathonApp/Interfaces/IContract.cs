@@ -5,6 +5,9 @@ using System.Threading.Tasks;
 
 namespace HackathonApp.Interfaces
 {
+    /// <summary>
+    /// Responsible for interaction with Ethereum
+    /// </summary>
     public interface IContract
     {
         /// <summary>
