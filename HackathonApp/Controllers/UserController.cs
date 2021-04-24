@@ -4,7 +4,6 @@ using HackathonApp.Dto;
 using HackathonApp.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using Microsoft.OpenApi.Any;
 
 namespace HackathonApp.Controllers
 {
@@ -12,6 +11,7 @@ namespace HackathonApp.Controllers
     public class UserController : BaseController
     {
         private readonly IUsers _users;
+        
         
         public UserController(IConfiguration configuration, IUsers users) : base(configuration)
         {
@@ -33,5 +33,14 @@ namespace HackathonApp.Controllers
             var result = await _users.Login(data);
             return Ok(result);
         }
+
+
+        [HttpGet]
+        public async Task<ActionResult<UserDetailsDto>> GetUserDetails()
+        {
+            var result = await _users.GetUserDetails(UserId, Role);
+            return Ok(result);
+        }
+      
     }
 }

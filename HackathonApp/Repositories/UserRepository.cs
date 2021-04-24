@@ -6,6 +6,7 @@ using HackathonApp.Dto.Exceptions;
 using HackathonApp.Helpers;
 using HackathonApp.Interfaces;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace HackathonApp.Repositories
 {
@@ -15,13 +16,15 @@ namespace HackathonApp.Repositories
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<Role> _roleManager;
         private readonly TokenHelper _tokenHelper;
+        private readonly DataContext _context;
 
-        public UserRepository(SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager, TokenHelper tokenHelper, RoleManager<Role> roleManager)
+        public UserRepository(SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager, TokenHelper tokenHelper, RoleManager<Role> roleManager, DataContext context)
         {
             _signInManager = signInManager;
             _userManager = userManager;
             _tokenHelper = tokenHelper;
             _roleManager = roleManager;
+            _context = context;
         }
 
         public async Task<Guid> CreteUser(CreateUserDto data)
@@ -38,7 +41,16 @@ namespace HackathonApp.Repositories
                     FirstName = data.FirstName,
                     LastName = data.LastName
                 };
-                
+
+                if (data.CompanyName != null)
+                {
+                    var companyCheck = await _context.Company
+                        .Include(x => x.Employees)
+                        .FirstOrDefaultAsync(x => x.Name == data.CompanyName); 
+                    if (companyCheck == null) throw new MyNotFoundException("Company not found.",404);
+                    companyCheck.Employees.Add(user);
+                    _context.Update(companyCheck);
+                }
                 var role = await _roleManager.FindByNameAsync(data.Role);
                 if (role == null) throw new MyNotFoundException("Role not found.", 404);
                 var create = await _userManager.CreateAsync(user, data.Password);
@@ -90,6 +102,21 @@ namespace HackathonApp.Repositories
         public async Task<bool> UpdateUser(Guid id, UserUpdateDto data)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<UserDetailsDto> GetUserDetails(Guid id, string role)
+        {
+            try
+            {
+                var currentUser = await CurrentUserHelper.GetUserDetails(_context,_userManager,id, role);
+                return currentUser;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+           
         }
     }
 }

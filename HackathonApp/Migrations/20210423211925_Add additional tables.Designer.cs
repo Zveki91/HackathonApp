@@ -3,15 +3,17 @@ using System;
 using HackathonApp.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace HackathonApp.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20210423211925_Add additional tables")]
+    partial class Addadditionaltables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -26,9 +28,6 @@ namespace HackathonApp.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<int>("AccessFailedCount")
-                        .HasColumnType("integer");
-
-                    b.Property<int?>("CompanyId")
                         .HasColumnType("integer");
 
                     b.Property<string>("ConcurrencyStamp")
@@ -83,8 +82,6 @@ namespace HackathonApp.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CompanyId");
-
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
 
@@ -104,9 +101,6 @@ namespace HackathonApp.Migrations
 
                     b.Property<int?>("CategoryId")
                         .HasColumnType("integer");
-
-                    b.Property<bool>("Domestic")
-                        .HasColumnType("boolean");
 
                     b.Property<string>("ImageUrl")
                         .HasColumnType("text");
@@ -395,13 +389,6 @@ namespace HackathonApp.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("HackathonApp.Data.ApplicationUser", b =>
-                {
-                    b.HasOne("HackathonApp.Data.Company", null)
-                        .WithMany("Employees")
-                        .HasForeignKey("CompanyId");
-                });
-
             modelBuilder.Entity("HackathonApp.Data.Article", b =>
                 {
                     b.HasOne("HackathonApp.Data.Category", "Category")
@@ -525,8 +512,6 @@ namespace HackathonApp.Migrations
                     b.Navigation("Branches");
 
                     b.Navigation("CompanyServices");
-
-                    b.Navigation("Employees");
                 });
 #pragma warning restore 612, 618
         }
