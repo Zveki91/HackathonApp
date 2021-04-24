@@ -58,7 +58,7 @@ namespace HackathonApp.Repositories
                 Discount discount = _context.Discount.Include(x => x.Article)
                     .FirstOrDefault(x => x.Article.Id == a.Id);
                 if (discount != null)
-                    price *= discount.PriceReduction / 100;
+                    price = price - price * discount.PriceReduction / 100;
                 newPurchase.Articles.Add(new ArticlePurchase()
                 {
                     Quantity = payloadArticle.Quantity,
