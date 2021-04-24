@@ -7,6 +7,7 @@ using HackathonApp.Dto;
 using HackathonApp.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
+using Nethereum.Web3;
 
 namespace HackathonApp.Repositories
 {
@@ -22,18 +23,18 @@ namespace HackathonApp.Repositories
             _context = context;
         }
 
-        public async Task<int> GetAmountOfTokens(Guid userId)
+        public async Task<decimal> GetAmountOfTokens(Guid userId)
         {
             var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == userId);
             var balance = await _contract.BalanceOf(user.Wallet);
-            return (int)balance;
+            return Web3.Convert.FromWei(balance, Nethereum.Util.UnitConversion.EthUnit.Ether);
         }
 
         public async Task<decimal> GetTokenValue(Guid userId)
         {
             var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == userId);
             var balance = await _contract.BalanceOf(user.Wallet);
-            return (decimal)balance * (decimal) 0.04;
+            return Web3.Convert.FromWei(balance, Nethereum.Util.UnitConversion.EthUnit.Ether) * (decimal) 0.04;
         }
 
         public async Task<int> GetLastIncome(Guid userId)

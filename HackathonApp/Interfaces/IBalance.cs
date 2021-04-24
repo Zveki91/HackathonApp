@@ -7,7 +7,7 @@ namespace HackathonApp.Interfaces
 {
     public interface IBalance
     {
-        Task<int> GetAmountOfTokens(Guid userId);
+        Task<decimal> GetAmountOfTokens(Guid userId);
 
         Task<decimal> GetTokenValue(Guid userId);
 
