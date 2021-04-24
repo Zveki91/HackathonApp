@@ -44,7 +44,8 @@ namespace HackathonApp.Repositories
                 Id = Guid.NewGuid(),
                 Branch = branch,
                 Customer = customer,
-                TotalPrice = 0,
+                TotalPrice = articles.Sum(x => x.Price),
+                DiscountedPrice = 0,
                 TokenAmount = 0,
                 Articles = new List<ArticlePurchase>(),
                 Date = DateTime.UtcNow
@@ -67,9 +68,8 @@ namespace HackathonApp.Repositories
                     Price = price,
                     Purchase = newPurchase
                 });
-                newPurchase.TotalPrice = newPurchase.Articles.Sum(x => x.Price);
             }
-
+            newPurchase.DiscountedPrice = newPurchase.Articles.Sum(x => x.Price);
             int tokenAmount = await CalculateTokenReward.GetRewardAmount(newPurchase);
             newPurchase.TokenAmount = tokenAmount;
 
@@ -89,7 +89,8 @@ namespace HackathonApp.Repositories
                     Name = x.Article.Name,
                     Price = x.Article.Price,
                 }).ToList(),
-                TotalPrice = newPurchase.TotalPrice
+                TotalPrice = newPurchase.TotalPrice,
+                DiscountedPrice = newPurchase.DiscountedPrice
             };
 
         }
@@ -114,7 +115,8 @@ namespace HackathonApp.Repositories
                     Name = x.Article.Name,
                     Price = x.Article.Price
                 }).ToList(),
-                TotalPrice = purchase.TotalPrice
+                TotalPrice = purchase.TotalPrice,
+                DiscountedPrice = purchase.DiscountedPrice
             };
         }
 
@@ -140,7 +142,8 @@ namespace HackathonApp.Repositories
                     Name = x.Article.Name,
                     Price = x.Article.Price
                 }).ToList(),
-                TotalPrice = x.TotalPrice
+                TotalPrice = x.TotalPrice,
+                DiscountedPrice = x.DiscountedPrice
             }).ToList();
 
             return new PaginatedList<PurchaseDto>(results.AsQueryable(), results.Count);
@@ -167,7 +170,8 @@ namespace HackathonApp.Repositories
                     Name = x.Article.Name,
                     Price = x.Article.Price
                 }).ToList(),
-                TotalPrice = x.TotalPrice
+                TotalPrice = x.TotalPrice,
+                DiscountedPrice = x.DiscountedPrice
             }).ToList();
 
             return new PaginatedList<PurchaseDto>(results.AsQueryable(), results.Count);
