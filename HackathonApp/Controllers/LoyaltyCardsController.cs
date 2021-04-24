@@ -1,4 +1,6 @@
-﻿using HackathonApp.Helpers;
+﻿using HackathonApp.Dto;
+using HackathonApp.Helpers;
+using HackathonApp.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -13,7 +15,12 @@ namespace HackathonApp.Controllers
     [ApiController]
     public class LoyaltyCardController : BaseController
     {
-        public LoyaltyCardController(IConfiguration configuration) : base(configuration) { }
+        private readonly IPurchase _purchase;
+
+        public LoyaltyCardController(IConfiguration configuration, IPurchase purchase) : base(configuration) 
+        {
+            _purchase = purchase;
+        }
 
         /// <summary>
         /// Invoked on purchase on PoS terminals.
@@ -22,9 +29,10 @@ namespace HackathonApp.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("submit")]
-        public ActionResult<object> SubmitPurchase([FromBody]object purchaseRequest)
+        public async Task<ActionResult<object>> SubmitPurchaseAsync([FromBody]CreatePurchaseDto purchaseRequest)
         {
-            return Ok();
+            purchaseRequest.CustomerId = UserId;
+            return Ok(await _purchase.CreatePurchase(purchaseRequest));
         }
 
         /// <summary>

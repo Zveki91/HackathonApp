@@ -55,6 +55,7 @@ namespace HackathonApp
             services.AddScoped<ICompanies, CompanyRepository>();
             services.AddScoped<IUsers, UserRepository>();
             services.AddScoped<IBalance, BalanceRepository>();
+            services.AddScoped<IPurchase, PurchaseRepository>();
 
             // services.AddScoped<IContract, ContractRepository>();
 

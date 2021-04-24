@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using HackathonApp.Data;
@@ -6,6 +7,7 @@ using HackathonApp.Dto;
 using HackathonApp.Dto.Exceptions;
 using HackathonApp.Helpers;
 using HackathonApp.Interfaces;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace HackathonApp.Repositories
@@ -14,18 +16,26 @@ namespace HackathonApp.Repositories
     {
         private readonly DataContext _context;
 
-        public PurchaseRepository(DataContext context)
+        private readonly IContract _contracts;
+
+        private readonly UserManager<ApplicationUser> _users;
+
+        public PurchaseRepository(DataContext context, IContract contracts, UserManager<ApplicationUser> users)
         {
+            _users = users;
             _context = context;
+            _contracts = contracts;
         }
 
         public async Task<PurchaseDto> CreatePurchase(CreatePurchaseDto data)
         {
             var branch = await _context.Branch.FirstOrDefaultAsync(x => x.Id == data.BranchId);
-            if (branch == null) throw new MyNotFoundException("Branch not found.", 404);
+            if (branch == null)
+                throw new MyNotFoundException("Branch not found.", 404);
             var customer = await _context.Users.FirstOrDefaultAsync(x => x.Id == data.CustomerId);
-            if (customer == null) throw new MyNotFoundException("Customer not found.", 404);
-            var articles = await _context.Article.Where(x => data.Articles.Select(x => x.ArticleId)
+            if (customer == null) 
+                throw new MyNotFoundException("Customer not found.", 404);
+            List<Article> articles = await _context.Article.Where(x => data.Articles.Select(x => x.ArticleId)
                 .Contains(x.Id)).ToListAsync();
             if (articles.Count == 0) throw new MyBadRequestException("Purchase must have at least 1 article.", 400);
 
@@ -34,17 +44,39 @@ namespace HackathonApp.Repositories
                 Id = Guid.NewGuid(),
                 Branch = branch,
                 Customer = customer,
-                TotalPrice = articles.Sum(x => x.Price)
+                TotalPrice = articles.Sum(x => x.Price),
+                TokenAmount = 0,
+                Articles = new List<ArticlePurchase>(),
+                Date = DateTime.UtcNow
             };
-            newPurchase.Articles = articles.Select(x => new ArticlePurchase
+            foreach(var a in articles)
             {
-                Id = Guid.NewGuid(),
-                Article = x,
-                Purchase = newPurchase
-            }).ToList();
+                Article dbArticle = _context.Article.FirstOrDefault(x => x.Id == a.Id);
+                PurchaseArticleDto payloadArticle = data.Articles.FirstOrDefault(x => x.ArticleId == a.Id);
+                decimal price = dbArticle.Price * payloadArticle.Quantity;
+
+                Discount discount = _context.Discount.Include(x => x.Article)
+                    .FirstOrDefault(x => x.Article.Id == a.Id);
+                if (discount != null)
+                    price *= discount.PriceReduction / 100;
+                newPurchase.Articles.Add(new ArticlePurchase()
+                {
+                    Quantity = payloadArticle.Quantity,
+                    Article = dbArticle,
+                    Id = Guid.NewGuid(),
+                    Price = price,
+                    Purchase = newPurchase
+                });
+            }
+
+            int tokenAmount = await CalculateTokenReward.GetRewardAmount(newPurchase);
+            newPurchase.TokenAmount = tokenAmount;
 
             await _context.Purchase.AddAsync(newPurchase);
             await _context.SaveChangesAsync();
+
+            var user = await _users.FindByIdAsync(data.CustomerId.ToString());
+            await _contracts.MintToken(user.Wallet, tokenAmount);
             return new PurchaseDto
             {
                 Id = newPurchase.Id,
@@ -54,7 +86,7 @@ namespace HackathonApp.Repositories
                 {
                     Id = x.Article.Id,
                     Name = x.Article.Name,
-                    Price = x.Article.Price
+                    Price = x.Article.Price,
                 }).ToList(),
                 TotalPrice = newPurchase.TotalPrice
             };
