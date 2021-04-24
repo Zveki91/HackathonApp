@@ -81,6 +81,9 @@ namespace HackathonApp.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("character varying(256)");
 
+                    b.Property<string>("WalletId")
+                        .HasColumnType("text");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CompanyId");
@@ -121,6 +124,27 @@ namespace HackathonApp.Migrations
                     b.HasIndex("CategoryId");
 
                     b.ToTable("Article");
+                });
+
+            modelBuilder.Entity("HackathonApp.Data.ArticlePurchase", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("ArticleId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("PurchaseId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ArticleId");
+
+                    b.HasIndex("PurchaseId");
+
+                    b.ToTable("ArticlePurchase");
                 });
 
             modelBuilder.Entity("HackathonApp.Data.Branch", b =>
@@ -257,6 +281,30 @@ namespace HackathonApp.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Manager");
+                });
+
+            modelBuilder.Entity("HackathonApp.Data.Purchase", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("BranchId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("CustomerId")
+                        .HasColumnType("uuid");
+
+                    b.Property<decimal>("TotalPrice")
+                        .HasColumnType("numeric");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BranchId");
+
+                    b.HasIndex("CustomerId");
+
+                    b.ToTable("Purchase");
                 });
 
             modelBuilder.Entity("HackathonApp.Data.Role", b =>
@@ -403,6 +451,21 @@ namespace HackathonApp.Migrations
                     b.Navigation("Category");
                 });
 
+            modelBuilder.Entity("HackathonApp.Data.ArticlePurchase", b =>
+                {
+                    b.HasOne("HackathonApp.Data.Article", "Article")
+                        .WithMany()
+                        .HasForeignKey("ArticleId");
+
+                    b.HasOne("HackathonApp.Data.Purchase", "Purchase")
+                        .WithMany("Articles")
+                        .HasForeignKey("PurchaseId");
+
+                    b.Navigation("Article");
+
+                    b.Navigation("Purchase");
+                });
+
             modelBuilder.Entity("HackathonApp.Data.Branch", b =>
                 {
                     b.HasOne("HackathonApp.Data.BranchManager", "BranchManager")
@@ -459,6 +522,21 @@ namespace HackathonApp.Migrations
                         .HasForeignKey("UserId");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("HackathonApp.Data.Purchase", b =>
+                {
+                    b.HasOne("HackathonApp.Data.Branch", "Branch")
+                        .WithMany()
+                        .HasForeignKey("BranchId");
+
+                    b.HasOne("HackathonApp.Data.ApplicationUser", "Customer")
+                        .WithMany()
+                        .HasForeignKey("CustomerId");
+
+                    b.Navigation("Branch");
+
+                    b.Navigation("Customer");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
@@ -519,6 +597,11 @@ namespace HackathonApp.Migrations
                     b.Navigation("CompanyServices");
 
                     b.Navigation("Employees");
+                });
+
+            modelBuilder.Entity("HackathonApp.Data.Purchase", b =>
+                {
+                    b.Navigation("Articles");
                 });
 #pragma warning restore 612, 618
         }

@@ -101,7 +101,7 @@ namespace HackathonApp.Repositories
 
         public async Task<bool> UpdateUser(Guid id, UserUpdateDto data)
         {
-            throw new NotImplementedException();
+            return true;
         }
 
         public async Task<UserDetailsDto> GetUserDetails(Guid id, string role)

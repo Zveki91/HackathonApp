@@ -8,5 +8,7 @@ namespace HackathonApp.Data
         public string FirstName { get; set; }
 
         public string LastName { get; set; }
+        
+        public string WalletId { get; set; }
     }
 }

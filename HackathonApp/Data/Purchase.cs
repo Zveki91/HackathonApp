@@ -15,7 +15,7 @@ namespace HackathonApp.Data
         
         public virtual ApplicationUser Customer { get; set; }
         
-        public virtual List<Article> Articles { get; set; }
+        public virtual List<ArticlePurchase> Articles { get; set; }
         
         public decimal TotalPrice { get; set; }
     }

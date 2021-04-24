@@ -10,8 +10,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace HackathonApp.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20210423135546_initial migration")]
-    partial class initialmigration
+    [Migration("20210424015934_change all Ids to Guid")]
+    partial class changeallIdstoGuid
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -29,6 +29,9 @@ namespace HackathonApp.Migrations
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("integer");
+
+                    b.Property<Guid?>("CompanyId")
+                        .HasColumnType("uuid");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -82,6 +85,8 @@ namespace HackathonApp.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CompanyId");
+
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
 
@@ -90,6 +95,170 @@ namespace HackathonApp.Migrations
                         .HasDatabaseName("UserNameIndex");
 
                     b.ToTable("AspNetUsers");
+                });
+
+            modelBuilder.Entity("HackathonApp.Data.Article", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("CategoryId")
+                        .HasColumnType("uuid");
+
+                    b.Property<bool>("Domestic")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("ImageUrl")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("numeric");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
+
+                    b.ToTable("Article");
+                });
+
+            modelBuilder.Entity("HackathonApp.Data.Branch", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("BranchManagerId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("CompanyId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Location")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BranchManagerId");
+
+                    b.HasIndex("CompanyId");
+
+                    b.ToTable("Branch");
+                });
+
+            modelBuilder.Entity("HackathonApp.Data.BranchManager", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("BranchManager");
+                });
+
+            modelBuilder.Entity("HackathonApp.Data.Category", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Category");
+                });
+
+            modelBuilder.Entity("HackathonApp.Data.Company", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Address")
+                        .HasColumnType("text");
+
+                    b.Property<Guid?>("ManagerId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ManagerId");
+
+                    b.ToTable("Company");
+                });
+
+            modelBuilder.Entity("HackathonApp.Data.CompanyService", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("CompanyId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CompanyId");
+
+                    b.ToTable("CompanyService");
+                });
+
+            modelBuilder.Entity("HackathonApp.Data.Discount", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("ArticleId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
+
+                    b.Property<int>("PriceReduction")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ArticleId");
+
+                    b.ToTable("Discount");
+                });
+
+            modelBuilder.Entity("HackathonApp.Data.Manager", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Manager");
                 });
 
             modelBuilder.Entity("HackathonApp.Data.Role", b =>
@@ -220,6 +389,80 @@ namespace HackathonApp.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("HackathonApp.Data.ApplicationUser", b =>
+                {
+                    b.HasOne("HackathonApp.Data.Company", null)
+                        .WithMany("Employees")
+                        .HasForeignKey("CompanyId");
+                });
+
+            modelBuilder.Entity("HackathonApp.Data.Article", b =>
+                {
+                    b.HasOne("HackathonApp.Data.Category", "Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryId");
+
+                    b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("HackathonApp.Data.Branch", b =>
+                {
+                    b.HasOne("HackathonApp.Data.BranchManager", "BranchManager")
+                        .WithMany()
+                        .HasForeignKey("BranchManagerId");
+
+                    b.HasOne("HackathonApp.Data.Company", "Company")
+                        .WithMany("Branches")
+                        .HasForeignKey("CompanyId");
+
+                    b.Navigation("BranchManager");
+
+                    b.Navigation("Company");
+                });
+
+            modelBuilder.Entity("HackathonApp.Data.BranchManager", b =>
+                {
+                    b.HasOne("HackathonApp.Data.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("HackathonApp.Data.Company", b =>
+                {
+                    b.HasOne("HackathonApp.Data.Manager", "Manager")
+                        .WithMany()
+                        .HasForeignKey("ManagerId");
+
+                    b.Navigation("Manager");
+                });
+
+            modelBuilder.Entity("HackathonApp.Data.CompanyService", b =>
+                {
+                    b.HasOne("HackathonApp.Data.Company", null)
+                        .WithMany("CompanyServices")
+                        .HasForeignKey("CompanyId");
+                });
+
+            modelBuilder.Entity("HackathonApp.Data.Discount", b =>
+                {
+                    b.HasOne("HackathonApp.Data.Article", "Article")
+                        .WithMany()
+                        .HasForeignKey("ArticleId");
+
+                    b.Navigation("Article");
+                });
+
+            modelBuilder.Entity("HackathonApp.Data.Manager", b =>
+                {
+                    b.HasOne("HackathonApp.Data.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
                 {
                     b.HasOne("HackathonApp.Data.Role", null)
@@ -269,6 +512,15 @@ namespace HackathonApp.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("HackathonApp.Data.Company", b =>
+                {
+                    b.Navigation("Branches");
+
+                    b.Navigation("CompanyServices");
+
+                    b.Navigation("Employees");
                 });
 #pragma warning restore 612, 618
         }

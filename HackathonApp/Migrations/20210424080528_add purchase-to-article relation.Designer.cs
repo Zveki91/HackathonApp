@@ -10,8 +10,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace HackathonApp.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20210423234702_add new relations")]
-    partial class addnewrelations
+    [Migration("20210424080528_add purchase-to-article relation")]
+    partial class addpurchasetoarticlerelation
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -30,8 +30,8 @@ namespace HackathonApp.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("CompanyId")
-                        .HasColumnType("integer");
+                    b.Property<Guid?>("CompanyId")
+                        .HasColumnType("uuid");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -83,6 +83,9 @@ namespace HackathonApp.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("character varying(256)");
 
+                    b.Property<string>("WalletId")
+                        .HasColumnType("text");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CompanyId");
@@ -99,13 +102,12 @@ namespace HackathonApp.Migrations
 
             modelBuilder.Entity("HackathonApp.Data.Article", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("uuid");
 
-                    b.Property<int?>("CategoryId")
-                        .HasColumnType("integer");
+                    b.Property<Guid?>("CategoryId")
+                        .HasColumnType("uuid");
 
                     b.Property<bool>("Domestic")
                         .HasColumnType("boolean");
@@ -126,18 +128,38 @@ namespace HackathonApp.Migrations
                     b.ToTable("Article");
                 });
 
+            modelBuilder.Entity("HackathonApp.Data.ArticlePurchase", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("ArticleId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("PurchaseId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ArticleId");
+
+                    b.HasIndex("PurchaseId");
+
+                    b.ToTable("ArticlePurchase");
+                });
+
             modelBuilder.Entity("HackathonApp.Data.Branch", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("uuid");
 
-                    b.Property<int?>("BranchManagerId")
-                        .HasColumnType("integer");
+                    b.Property<Guid?>("BranchManagerId")
+                        .HasColumnType("uuid");
 
-                    b.Property<int?>("CompanyId")
-                        .HasColumnType("integer");
+                    b.Property<Guid?>("CompanyId")
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Location")
                         .HasColumnType("text");
@@ -156,10 +178,9 @@ namespace HackathonApp.Migrations
 
             modelBuilder.Entity("HackathonApp.Data.BranchManager", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("uuid");
 
                     b.Property<Guid?>("UserId")
                         .HasColumnType("uuid");
@@ -173,10 +194,9 @@ namespace HackathonApp.Migrations
 
             modelBuilder.Entity("HackathonApp.Data.Category", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Name")
                         .HasColumnType("text");
@@ -188,16 +208,15 @@ namespace HackathonApp.Migrations
 
             modelBuilder.Entity("HackathonApp.Data.Company", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Address")
                         .HasColumnType("text");
 
-                    b.Property<int?>("ManagerId")
-                        .HasColumnType("integer");
+                    b.Property<Guid?>("ManagerId")
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Name")
                         .HasColumnType("text");
@@ -211,13 +230,12 @@ namespace HackathonApp.Migrations
 
             modelBuilder.Entity("HackathonApp.Data.CompanyService", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("uuid");
 
-                    b.Property<int?>("CompanyId")
-                        .HasColumnType("integer");
+                    b.Property<Guid?>("CompanyId")
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Name")
                         .HasColumnType("text");
@@ -231,13 +249,12 @@ namespace HackathonApp.Migrations
 
             modelBuilder.Entity("HackathonApp.Data.Discount", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("uuid");
 
-                    b.Property<int?>("ArticleId")
-                        .HasColumnType("integer");
+                    b.Property<Guid?>("ArticleId")
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Name")
                         .HasColumnType("text");
@@ -254,10 +271,9 @@ namespace HackathonApp.Migrations
 
             modelBuilder.Entity("HackathonApp.Data.Manager", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("uuid");
 
                     b.Property<Guid?>("UserId")
                         .HasColumnType("uuid");
@@ -267,6 +283,30 @@ namespace HackathonApp.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Manager");
+                });
+
+            modelBuilder.Entity("HackathonApp.Data.Purchase", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("BranchId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("CustomerId")
+                        .HasColumnType("uuid");
+
+                    b.Property<decimal>("TotalPrice")
+                        .HasColumnType("numeric");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BranchId");
+
+                    b.HasIndex("CustomerId");
+
+                    b.ToTable("Purchase");
                 });
 
             modelBuilder.Entity("HackathonApp.Data.Role", b =>
@@ -413,6 +453,21 @@ namespace HackathonApp.Migrations
                     b.Navigation("Category");
                 });
 
+            modelBuilder.Entity("HackathonApp.Data.ArticlePurchase", b =>
+                {
+                    b.HasOne("HackathonApp.Data.Article", "Article")
+                        .WithMany()
+                        .HasForeignKey("ArticleId");
+
+                    b.HasOne("HackathonApp.Data.Purchase", "Purchase")
+                        .WithMany("Articles")
+                        .HasForeignKey("PurchaseId");
+
+                    b.Navigation("Article");
+
+                    b.Navigation("Purchase");
+                });
+
             modelBuilder.Entity("HackathonApp.Data.Branch", b =>
                 {
                     b.HasOne("HackathonApp.Data.BranchManager", "BranchManager")
@@ -469,6 +524,21 @@ namespace HackathonApp.Migrations
                         .HasForeignKey("UserId");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("HackathonApp.Data.Purchase", b =>
+                {
+                    b.HasOne("HackathonApp.Data.Branch", "Branch")
+                        .WithMany()
+                        .HasForeignKey("BranchId");
+
+                    b.HasOne("HackathonApp.Data.ApplicationUser", "Customer")
+                        .WithMany()
+                        .HasForeignKey("CustomerId");
+
+                    b.Navigation("Branch");
+
+                    b.Navigation("Customer");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
@@ -529,6 +599,11 @@ namespace HackathonApp.Migrations
                     b.Navigation("CompanyServices");
 
                     b.Navigation("Employees");
+                });
+
+            modelBuilder.Entity("HackathonApp.Data.Purchase", b =>
+                {
+                    b.Navigation("Articles");
                 });
 #pragma warning restore 612, 618
         }

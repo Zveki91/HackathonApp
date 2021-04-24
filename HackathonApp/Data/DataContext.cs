@@ -27,5 +27,7 @@ namespace HackathonApp.Data
         public DbSet<Manager> Manager { get; set; }
         
         public DbSet<Discount> Discount { get; set; }
+        
+        public DbSet<Purchase> Purchase { get; set; }
     }
 }

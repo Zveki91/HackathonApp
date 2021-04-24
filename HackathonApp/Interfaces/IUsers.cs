@@ -10,8 +10,6 @@ namespace HackathonApp.Interfaces
         public Task<Guid> CreteUser(CreateUserDto data);
         
         public Task<PaginatedList<UserDetailsDto>> GetListOfUsers(int size, int page);
-        
-        public Task<PaginatedList<UserDetailsDto>> GetListOfUsersForCompany(int companyId,int size, int page);
         public Task<LoginTokenDto> Login(LoginDto data);
         
         public Task<bool> UpdateUser(Guid id, UserUpdateDto data);
