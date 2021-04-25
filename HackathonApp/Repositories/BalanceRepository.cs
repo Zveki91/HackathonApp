@@ -53,9 +53,9 @@ namespace HackathonApp.Repositories
             var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == userId);
             var transactions = await _context.Purchase
                 .Include(x => x.Customer)
-                .Where(x => x.Customer.Id == userId)
+                .Where(x => x.Customer.Id == userId && x.TokenAmount < 0)
                 .ToListAsync();
-            var amountOfSpentTokens = transactions.Sum(x => x.TokenAmount);
+            var amountOfSpentTokens = (-1) * transactions.Sum(x => x.TokenAmount);
             return amountOfSpentTokens;
         }
 
