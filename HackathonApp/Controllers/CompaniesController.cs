@@ -15,6 +15,7 @@ namespace HackathonApp.Controllers
     public class CompaniesController : BaseController
     {
         private readonly ICompanies _companies;
+        private readonly IPurchase _purchase;
         
         public CompaniesController(IConfiguration configuration, ICompanies companies) : base(configuration)
         {
@@ -75,10 +76,31 @@ namespace HackathonApp.Controllers
         [HttpGet("{companyId:guid}/transactions")]
         public async Task<ActionResult<object>> GetTransactionsOfCompany(Guid companyId)
         {
-            //TODO implenment
+            var result = await _purchase.GetListOfPurchasesForCompany(companyId);
             return Ok(null);
         }
 
+        [HttpPost("create-discount")]
+        public async Task<ActionResult<DiscountDto>> CreateDiscount(CreateDiscountDto data)
+        {
+            var result = await _companies.CreateDiscount(data);
+            return Ok(result);
+        }
+
+        [HttpGet("discounts")]
+        public async Task<ActionResult<DiscountDto>> GetDiscounts()
+        {
+            var result = await _companies.GetListOfDiscounts();
+            return Ok(result);
+        }
+        
+        [HttpGet("discounts/{id}")]
+        public async Task<ActionResult<DiscountDto>> GetDiscount(Guid id)
+        {
+            var result = await _companies.GetDiscount(id);
+            return Ok(result);
+        }
+        
 
     }
 }
