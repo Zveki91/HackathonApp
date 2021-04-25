@@ -21,6 +21,24 @@ namespace HackathonApp.Controllers
 
         private readonly IBalance _balance;
 
+        [HttpGet("statistics")]
+        public async Task<ActionResult<object>> GetStatistics()
+        {
+            decimal tokens = await _balance.GetAmountOfTokens(UserId);
+            decimal value = await _balance.GetTokenValue(UserId);
+            int spent = await _balance.GetAmountOfSpentTokens(UserId);
+            int lastIncom = await _balance.GetLastIncome(UserId);
+            List<TransactionDto> txs = await _balance.GetListOfTransactions(UserId);
+            return Ok(new 
+            { 
+                TokenAmount = tokens,
+                TokenValue = value,
+                TokensSpent = spent,
+                LastIncome = lastIncom,
+                LastTransaction = txs
+            });
+        }
+
         [HttpGet("tokens-current")]
         public async Task<ActionResult<int>> GetAmountOfTokens()
         {
