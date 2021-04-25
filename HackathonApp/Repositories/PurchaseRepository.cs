@@ -102,6 +102,7 @@ namespace HackathonApp.Repositories
                 .Include(x => x.Branch)
                 .ThenInclude(x => x.Company)
                 .Include(x => x.Articles)
+                .ThenInclude(x => x.Article)
                 .Include(x => x.Customer)
                 .FirstOrDefaultAsync(x => x.Id == id && x.Customer.Id == userId);
             if (purchase == null) throw new MyNotFoundException("Purchase not found.", 404);
@@ -128,6 +129,7 @@ namespace HackathonApp.Repositories
                 .Include(x => x.Branch)
                 .ThenInclude(x => x.Company)
                 .Include(x => x.Articles)
+                .ThenInclude(x => x.Article)
                 .Include(x => x.Customer)
                 .Where(x => x.Branch.Company.Id == companyId)
                 .ToListAsync();
@@ -158,6 +160,7 @@ namespace HackathonApp.Repositories
                 .Include(x => x.Branch)
                 .ThenInclude(x => x.Company)
                 .Include(x => x.Articles)
+                .ThenInclude(x => x.Article)
                 .Include(x => x.Customer)
                 .Where(x => x.Customer.Id == userId)
                 .ToListAsync();

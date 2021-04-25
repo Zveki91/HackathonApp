@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using HackathonApp.Dto;
 using HackathonApp.Dto.Purchases;
@@ -27,6 +28,27 @@ namespace HackathonApp.Controllers
         {
             data.CustomerId = UserId;
             var result = await _purchase.CreatePurchase(data);
+            return Ok(result);
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<PurchaseDto>> GetPurchaseInfo()
+        {
+            var result = await _purchase.GetListOfPurchasesForUser(UserId);
+            return Ok(result);
+        }
+        
+        [HttpGet("{id}")]
+        public async Task<ActionResult<PurchaseDto>> GetPurchaseInfo(Guid id)
+        {
+            var result = await _purchase.GetPurchase(id, UserId);
+            return Ok(result);
+        }
+        
+        [HttpGet("company/{id}")]
+        public async Task<ActionResult<PurchaseDto>> GetPurchasesForCompany(Guid id)
+        {
+            var result = await _purchase.GetListOfPurchasesForCompany(id);
             return Ok(result);
         }
     }
