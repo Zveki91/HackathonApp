@@ -15,5 +15,7 @@ namespace HackathonApp.Dto
         
         public decimal TotalPrice { get; set; }
 
+        public decimal DiscountedPrice { get; set; }
+
     }
 }
