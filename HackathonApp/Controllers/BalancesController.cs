@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using HackathonApp.Dto;
@@ -59,6 +60,20 @@ namespace HackathonApp.Controllers
         public async Task<ActionResult<List<TransactionDto>>> GetLastTransactions()
         {
             var result = await _balance.GetListOfLastTransactions(UserId);
+            return Ok(result);
+        }
+
+        [HttpGet("tokens-daily")]
+        public async Task<ActionResult<DailyTokens>> GetDailyTokensReport()
+        {
+            var result = await _balance.GetAmountOfTokensEarnedPerDay(UserId);
+            return Ok(result);
+        }
+        
+        [HttpGet("tokens-monthly")]
+        public async Task<ActionResult<DailyTokens>> GetMonthlyTokensReport()
+        {
+            var result = await _balance.GetAmountOfTokensEarnedPerMonth(UserId);
             return Ok(result);
         }
     }
