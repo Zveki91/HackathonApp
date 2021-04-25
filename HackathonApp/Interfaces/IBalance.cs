@@ -20,6 +20,7 @@ namespace HackathonApp.Interfaces
         Task<List<TransactionDto>> GetListOfLastTransactions(Guid userId);
 
         Task<List<DailyTokens>> GetAmountOfTokensEarnedPerDay(Guid userId);
+        Task<List<DailyTokens>> GetAmountOfTokensEarnedPerMonth(Guid userId);
     }
     
 }

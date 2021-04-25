@@ -105,7 +105,21 @@ namespace HackathonApp.Repositories
                 .Where(x => x.Customer.Id == userId && x.Date.Month == DateTime.Now.Month)
                 .GroupBy(x => x.Date.Day,(key, e)=> new DailyTokens
                 {
-                    Day = key,
+                    Day = $"{DateTime.Now.Month.ToString()}/{key}",
+                    Tokens = e.Sum(t => t.TokenAmount)
+                })
+                .ToListAsync();
+            return transactions;
+        }
+        
+        public async Task<List<DailyTokens>> GetAmountOfTokensEarnedPerMonth(Guid userId)
+        {
+            var transactions = await _context.Purchase
+                .Include(x => x.Customer)
+                .Where(x => x.Customer.Id == userId && x.Date.Year == DateTime.Now.Year)
+                .GroupBy(x => x.Date.Month,(key, e)=> new DailyTokens
+                {
+                    Day = $"{DateTime.Now.Year.ToString()}/{key}",
                     Tokens = e.Sum(t => t.TokenAmount)
                 })
                 .ToListAsync();
