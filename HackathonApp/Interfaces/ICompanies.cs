@@ -19,6 +19,12 @@ namespace HackathonApp.Interfaces
 
         Task<Guid> CreateBranch(CreateBranchDto data);
 
+        Task<DiscountDto> CreateDiscount(CreateDiscountDto data);
+
+        Task<DiscountDto> GetDiscount(Guid id);
+
+        Task<List<DiscountDto>> GetListOfDiscounts();
+
 
     }
 }

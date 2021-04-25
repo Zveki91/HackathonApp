@@ -182,5 +182,69 @@ namespace HackathonApp.Repositories
             await _context.SaveChangesAsync();
             return newBranch.Id;
         }
+
+        public async Task<DiscountDto> CreateDiscount(CreateDiscountDto data)
+        {
+            var article = await _context.Article.FirstOrDefaultAsync(x => x.Id == data.ArticleId);
+            if (article == null) throw new MyNotFoundException("Article not found.",404);
+            var branch = await _context.Branch.FirstOrDefaultAsync(x => x.Id == data.Branch);
+            if (branch == null) throw new MyNotFoundException("Branch not found.", 404);
+            var newDiscount = new Discount
+            {
+                Id = Guid.NewGuid(),
+                Name = data.Name,
+                Article = article,
+                Branch = branch,
+                PriceReduction = data.PriceReduction
+            };
+
+            await _context.Discount.AddAsync(newDiscount);
+            await _context.SaveChangesAsync();
+
+            return new DiscountDto
+            {
+                Id = newDiscount.Id,
+                Name = newDiscount.Name,
+                ArticleName = article.Name,
+                BranchName = branch.Name,
+                PriceReduction = data.PriceReduction
+            };
+        }
+
+        public async Task<DiscountDto> GetDiscount(Guid id)
+        {
+            var discount = await _context.Discount
+                .Include(x => x.Article)
+                .Include(x => x.Branch)
+                .FirstOrDefaultAsync(x => x.Id == id);
+            if (discount == null) throw new MyNotFoundException("Discount not found.", 404);
+            return new DiscountDto
+            {
+                Id = discount.Id,
+                Name = discount.Name,
+                ArticleName = discount.Article.Name,
+                BranchName = discount.Branch.Name,
+                PriceReduction = discount.PriceReduction
+            };
+
+        }
+
+        public async Task<List<DiscountDto>> GetListOfDiscounts()
+        {
+            var discounts = await _context.Discount
+                .Include(x => x.Article)
+                .Include(x => x.Branch)
+                .ToListAsync();
+            if (discounts.Count == 0 ) throw new MyNotFoundException("No active Discounts.", 404);
+            var result = discounts.Select(x => new DiscountDto
+            {
+                Id = x.Id,
+                Name = x.Name,
+                ArticleName = x.Article.Name,
+                BranchName = x.Branch.Name,
+                PriceReduction = x.PriceReduction
+            }).ToList();
+            return result;
+        }
     }
 }
