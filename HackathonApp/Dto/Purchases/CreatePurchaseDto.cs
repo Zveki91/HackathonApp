@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace HackathonApp.Dto
+namespace HackathonApp.Dto.Purchases
 {
     public class CreatePurchaseDto
     {

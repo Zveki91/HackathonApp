@@ -1,6 +1,6 @@
 using System;
 
-namespace HackathonApp.Dto
+namespace HackathonApp.Dto.Purchases
 {
     public class PurchaseArticleDto
     {

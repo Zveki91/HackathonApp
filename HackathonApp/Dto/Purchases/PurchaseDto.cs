@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace HackathonApp.Dto
+namespace HackathonApp.Dto.Purchases
 {
     public class PurchaseDto
     {
@@ -17,5 +17,6 @@ namespace HackathonApp.Dto
 
         public decimal DiscountedPrice { get; set; }
 
+        public int TokenAmount { get; set; }
     }
 }

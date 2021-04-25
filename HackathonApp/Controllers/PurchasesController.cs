@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using HackathonApp.Dto;
+using HackathonApp.Dto.Purchases;
 using HackathonApp.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -20,7 +21,7 @@ namespace HackathonApp.Controllers
             _purchase = purchase;
             _contract = contract;
         }
-
+            
         [HttpPost]
         public async Task<ActionResult<PurchaseDto>> CreatePurchase(CreatePurchaseDto data)
         {

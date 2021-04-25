@@ -1,4 +1,5 @@
 ﻿using HackathonApp.Dto;
+using HackathonApp.Dto.Purchases;
 using HackathonApp.Helpers;
 using HackathonApp.Interfaces;
 using Microsoft.AspNetCore.Http;
@@ -29,7 +30,7 @@ namespace HackathonApp.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("submit")]
-        public async Task<ActionResult<object>> SubmitPurchaseAsync([FromBody]CreatePurchaseDto purchaseRequest)
+        public async Task<ActionResult<PurchaseDto>> SubmitPurchaseAsync([FromBody]CreatePurchaseDto purchaseRequest)
         {
             purchaseRequest.CustomerId = UserId;
             return Ok(await _purchase.CreatePurchase(purchaseRequest));
@@ -42,9 +43,10 @@ namespace HackathonApp.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("redeem")]
-        public ActionResult<object> RedeemTokens([FromBody]object redeemRequest)
+        public async Task<ActionResult<PurchaseDto>> RedeemTokensAsync([FromBody]CreateRedeemPurchaseDto redeemRequest)
         {
-            return Ok();
+            redeemRequest.CustomerId = UserId;
+            return Ok(await _purchase.CreateRedeemPurchase(redeemRequest));
         }
     }
 }
